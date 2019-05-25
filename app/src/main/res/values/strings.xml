@@ -13,5 +13,9 @@
     <string name="impostazioni">Qui compariranno le impostazioni</string>
     <string name="imp">Impostazioni</string>
     <string name="new_insert">Qui ci sarà la schermata per inserire i nuovi giochi</string>
+    <string name="login">Login</string>
+    <string name="Username">Username</string>
+    <string name="Autologin">Accesso automatico</string>
+    <string name="Password">Password</string>
 
 </resources>
