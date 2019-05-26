@@ -20,7 +20,11 @@
         <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"/>
     </fragment>
     <fragment android:id="@+id/fragment_login" android:name="com.example.progetto2.fragment_impostazioni"
-              android:label="fragment_fragment_impostazioni" tools:layout="@layout/fragment_fragment_login"/>
+              android:label="fragment_fragment_impostazioni" tools:layout="@layout/fragment_fragment_login">
+        <action android:id="@+id/action_fragment_login_to_newaccount" app:destination="@id/newaccount"/>
+    </fragment>
     <fragment android:id="@+id/fragment_inserimento" android:name="com.example.progetto2.fragment_inserimento"
               android:label="fragment_fragment_inserimento" tools:layout="@layout/fragment_fragment_inserimento"/>
+    <fragment android:id="@+id/newaccount" android:name="com.example.progetto2.newaccount"
+              android:label="fragment_newaccount" tools:layout="@layout/fragment_newaccount"/>
 </navigation>
