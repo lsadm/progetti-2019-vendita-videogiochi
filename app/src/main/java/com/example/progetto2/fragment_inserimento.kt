@@ -51,6 +51,7 @@ class fragment_inserimento : Fragment() {
                 val myref = database.getReference(nome)
                 val god = Gioco(nome, prezzo.toInt(), luogo)
                 myref.setValue(god)
+                Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
             }
             else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
         }
