@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.progetto2.datamodel.Gioco
 
-class Adapter(val dataset: ArrayList<Gioco>, val context: Context) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
+class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
 
     // Invocata per creare un ViewHolder
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RigaGiocoViewHolder {
@@ -23,8 +23,8 @@ class Adapter(val dataset: ArrayList<Gioco>, val context: Context) : RecyclerVie
     override fun onBindViewHolder(viewHolder: RigaGiocoViewHolder, position: Int) {
         val gioco = dataset.get(position)
 
-        viewHolder.Nome.text = gioco.nome
-        viewHolder.Prezzo.text= gioco.prezzo.toString()
-        viewHolder.Luogo.text= gioco.luogo
+        viewHolder.Nome.text = gioco?.nome
+        viewHolder.Prezzo.text= gioco?.prezzo.toString()
+        viewHolder.Luogo.text= gioco?.luogo
     }
 }

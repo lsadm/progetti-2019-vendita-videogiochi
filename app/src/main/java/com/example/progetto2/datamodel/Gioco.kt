@@ -1,3 +1,3 @@
 package com.example.progetto2.datamodel
 
-data class Gioco (var nome:String, var prezzo:Int, var luogo:String)
+data class Gioco (var nome:String? = null, var prezzo:Int? = null, var luogo:String? = null)
