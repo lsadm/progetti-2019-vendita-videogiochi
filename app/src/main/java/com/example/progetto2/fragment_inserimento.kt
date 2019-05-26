@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.view.*
+import android.widget.Toast
+import com.example.progetto2.datamodel.Gioco
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
 
 class fragment_inserimento : Fragment() {
@@ -15,7 +18,6 @@ class fragment_inserimento : Fragment() {
         super.onCreate(savedInstanceState)
         //aggiungo questa riga per aggiungere un riferimento al menu
         setHasOptionsMenu(true)
-
     }
 
     // Costante utilizzata per distinguere l'origine della richiesta
@@ -38,6 +40,20 @@ class fragment_inserimento : Fragment() {
                 startActivityForResult(takePhoto, REQUEST_IMAGE_CAPTURE)
             }
         }
+        //inserimento annuncio
+        ok.setOnClickListener {
+            val nome = nome_gioco.text.toString()
+            val luogo = luogo_gioco.text.toString()
+            val prezzo = prezzo_gioco.text.toString()
+
+            if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0) {
+                val database = FirebaseDatabase.getInstance()
+                val myref = database.getReference(nome)
+                val god = Gioco(nome, prezzo.toInt(), luogo)
+                myref.setValue(god)
+            }
+            else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
+        }
     }
 
     //questa funzione rende invisibile il menu nel fragment impostazioni
@@ -58,5 +74,4 @@ class fragment_inserimento : Fragment() {
             foto1.setImageBitmap(immagineCatturata)
         }
     }
-
 }

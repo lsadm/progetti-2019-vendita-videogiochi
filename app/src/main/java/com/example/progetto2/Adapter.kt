@@ -24,7 +24,7 @@ class Adapter(val dataset: ArrayList<Gioco>, val context: Context) : RecyclerVie
         val gioco = dataset.get(position)
 
         viewHolder.Nome.text = gioco.nome
-        viewHolder.Prezzo.text= gioco.prezzo
+        viewHolder.Prezzo.text= gioco.prezzo.toString()
         viewHolder.Luogo.text= gioco.luogo
     }
 }
