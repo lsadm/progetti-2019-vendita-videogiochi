@@ -5,12 +5,12 @@
 
     <fragment android:id="@+id/home" android:name="com.example.progetto2.Home" android:label="fragment_home"
               tools:layout="@layout/fragment_home">
-        <action android:id="@+id/action_home_to_ps4_list" app:destination="@id/ps4_list"/>
+        <action android:id="@+id/action_home_to_ps4_list" app:destination="@id/menu_inserimento"/>
         <action android:id="@+id/action_home_to_ps4_news" app:destination="@id/ps4_news"/>
         <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"
         />
     </fragment>
-    <fragment android:id="@+id/ps4_list" android:name="com.example.progetto2.ps4_list"
+    <fragment android:id="@+id/menu_inserimento" android:name="com.example.progetto2.ps4_list"
               android:label="fragment_ps4_list" tools:layout="@layout/fragment_ps4_list">
         <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"/>
         <action android:id="@+id/action_ps4_list_to_fragment_inserimento" app:destination="@id/fragment_inserimento"/>

@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
@@ -28,7 +29,14 @@ class fragment_inserimento : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_fragment_inserimento, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?){
+        super.onCreateOptionsMenu(menu, inflater)
+        menu?.clear()
+        inflater?.inflate(R.menu.menu_inserimento, menu)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,30 +48,28 @@ class fragment_inserimento : Fragment() {
                 startActivityForResult(takePhoto, REQUEST_IMAGE_CAPTURE)
             }
         }
-        //inserimento annuncio
-        ok.setOnClickListener {
-            val nome = nome_gioco.text.toString()
-            val luogo = luogo_gioco.text.toString()
-            val prezzo = prezzo_gioco.text.toString()
+    }
+    //inserimento annuncio, con tasto in alto a destra
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_inserimento -> {      // Conferma
+                val nome = nome_gioco.text.toString()
+                val luogo = luogo_gioco.text.toString()
+                val prezzo = prezzo_gioco.text.toString()
 
-            if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0) {
-                val database = FirebaseDatabase.getInstance()
-                val myref = database.getReference(nome)
-                val god = Gioco(nome, prezzo.toInt(), luogo)
-                myref.setValue(god)
-                Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
+                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0) {
+                    val database = FirebaseDatabase.getInstance()
+                    val myref = database.getReference(nome)
+                    val god = Gioco(nome, prezzo.toInt(), luogo)
+                    myref.setValue(god)
+                    Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
+                }
+                else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
+                    Navigation.findNavController(view!!).navigateUp()
+                }
             }
-            else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
-        }
+        return super.onOptionsItemSelected(item)
     }
-
-    //questa funzione rende invisibile il menu nel fragment impostazioni
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu?.clear()
-    }
-
-
     /**
      * Questo metodo viene invocato per gestire il risultato al ritorno da una activity
      * occorre determinare chi aveva generato la richiesta
