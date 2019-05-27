@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
-import com.example.progetto2.datamodel.Database
 import com.example.progetto2.datamodel.Gioco
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_ps4_list.*

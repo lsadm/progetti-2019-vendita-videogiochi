@@ -40,6 +40,8 @@ class fragment_inserimento : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val v: View? = activity?.findViewById(R.id.bottomNavigation)
+        v?.visibility=View.GONE
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
         foto1.setOnClickListener {
             // Creo un intent di tipo implicito per acquisire l'immagine
