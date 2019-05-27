@@ -60,12 +60,11 @@ class fragment_inserimento : Fragment() {
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0) {
                     val database = FirebaseDatabase.getInstance()
                     val myref = database.getReference(nome)
-                    val god = Gioco(nome, prezzo.toInt(), luogo)
-                    myref.setValue(god)
+                    myref.setValue(Gioco(nome, prezzo.toInt(), luogo))
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(view!!).navigateUp()
                 }
                 else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
-                    Navigation.findNavController(view!!).navigateUp()
                 }
             }
         return super.onOptionsItemSelected(item)
