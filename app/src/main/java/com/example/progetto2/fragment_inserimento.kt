@@ -3,6 +3,8 @@ package com.example.progetto2
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -11,16 +13,23 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
+import com.google.firebase.storage.StorageReference
+import java.io.File
+import android.support.annotation.NonNull
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.storage.UploadTask
+import com.google.android.gms.tasks.OnSuccessListener
+import java.io.ByteArrayOutputStream
+
 
 class fragment_inserimento : Fragment() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //aggiungo questa riga per aggiungere un riferimento al menu
         setHasOptionsMenu(true)
     }
-
     // Costante utilizzata per distinguere l'origine della richiesta
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -64,9 +73,25 @@ class fragment_inserimento : Fragment() {
                     val myref = database.getReference(nome)
                     myref.setValue(Gioco(nome, prezzo.toInt(), luogo))
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
-                    Navigation.findNavController(view!!).navigateUp()
+                    //carica le foto inserite dell'annuncio sul database
+                    // Create a storage reference from our app
+                    val storageRef = FirebaseStorage.getInstance().getReference()
+                    // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
+                    val mountainsRef = storageRef.child(nome)
+                    val bitmap = (foto1.drawable as? BitmapDrawable)?.bitmap
+                    val baos = ByteArrayOutputStream()
+                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    val data = baos.toByteArray()
+                    var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
+                    uploadTask.addOnFailureListener {
+                        Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
+                    }.addOnSuccessListener {
+                        //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else {  Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show() }
+                else {  //Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
+                     }
+                Navigation.findNavController(view!!).navigateUp()
                 }
             }
         return super.onOptionsItemSelected(item)
@@ -83,3 +108,4 @@ class fragment_inserimento : Fragment() {
         }
     }
 }
+
