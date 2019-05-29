@@ -65,7 +65,7 @@ class AreaPersonale : Fragment() {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()
-        val adapter = Adapter(games,requireContext())
+        val adapter = Adapter(games,requireContext(),1)
         lista_mieigiochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {

@@ -119,7 +119,7 @@ class ps4_list : Fragment() {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()
-        val adapter = Adapter(games,requireContext())
+        val adapter = Adapter(games,requireContext(),0)
         lista_giochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {
