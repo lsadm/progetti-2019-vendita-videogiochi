@@ -8,8 +8,11 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_fragment_login.*
 
 
@@ -33,7 +36,8 @@ class fragment_impostazioni : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     var auth = FirebaseAuth.getInstance()
-    private val TAG = "MainActivity"
+    var user : FirebaseUser? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +58,12 @@ class fragment_impostazioni : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_fragment_login, container, false)
     }
+
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.getCurrentUser()
-        updateUI(currentUser)
+       // updateUI(currentUser)
     }
     fun updateUI(usr : FirebaseUser?){
         if (usr!= null){
@@ -73,7 +78,7 @@ class fragment_impostazioni : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("MainActivity", "signInWithEmail:success")
-                    val user = auth.currentUser
+                    user = auth.currentUser
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.

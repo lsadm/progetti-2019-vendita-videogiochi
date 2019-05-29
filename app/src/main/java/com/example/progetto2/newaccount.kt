@@ -7,7 +7,11 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_newaccount.*
 
 
@@ -32,6 +36,7 @@ class newaccount : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var auth : FirebaseAuth
     private val TAG = "MainActivity"
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,7 @@ class newaccount : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
         //aggiungo questa riga per aggiungere un riferimento al menu
         setHasOptionsMenu(true)
     }
@@ -55,6 +61,11 @@ class newaccount : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
+    }
+
+    fun writeNewUser(user : String?) {   //al momento non serve a nulla questa funzione
+        val usr = User(user)
+        database.child("users").setValue(usr)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +91,8 @@ class newaccount : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
-                    val user = auth.currentUser
+                    val user = auth.currentUser?.uid
+                   // writeNewUser(user)
                     Toast.makeText(activity,"Utente registrato con successo",Toast.LENGTH_SHORT).show()
                  //   updateUI(user)
                 } else {

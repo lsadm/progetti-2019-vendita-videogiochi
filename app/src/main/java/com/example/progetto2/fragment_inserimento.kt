@@ -18,13 +18,17 @@ import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
 import com.google.firebase.storage.StorageReference
 import java.io.File
 import android.support.annotation.NonNull
+import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.storage.UploadTask
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_fragment_login.*
 import java.io.ByteArrayOutputStream
 
 
 class fragment_inserimento : Fragment() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //aggiungo questa riga per aggiungere un riferimento al menu
@@ -67,11 +71,14 @@ class fragment_inserimento : Fragment() {
                 val nome = nome_gioco.text.toString()
                 val luogo = luogo_gioco.text.toString()
                 val prezzo = prezzo_gioco.text.toString()
+                val auth = FirebaseAuth.getInstance()
+                val id = auth.currentUser?.uid
 
-                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0) {
-                    val database = FirebaseDatabase.getInstance()
-                    val myref = database.getReference(nome)
-                    myref.setValue(Gioco(nome, prezzo.toInt(), luogo))
+                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null) {
+                    val database = FirebaseDatabase.getInstance().reference
+                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo))   //carico nel database nell'area riservata
+                    val key = database.child("Giochi").push()  //questa push mi restituisce un identificativo unico del percorso creato
+                    key.setValue(Gioco(nome, prezzo.toInt(), luogo))    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
@@ -86,12 +93,12 @@ class fragment_inserimento : Fragment() {
                     uploadTask.addOnFailureListener {
                         Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
                     }.addOnSuccessListener {
-                        //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
                     }
                 }
-                else {  //Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
+                else {
+                        Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
                      }
-                Navigation.findNavController(view!!).navigateUp()
                 }
             }
         return super.onOptionsItemSelected(item)

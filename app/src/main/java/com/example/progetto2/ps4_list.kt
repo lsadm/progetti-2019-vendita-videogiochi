@@ -36,6 +36,7 @@ class ps4_list : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var database: DatabaseReference
+    private lateinit var database2: DatabaseReference   //mi serve per leggermi i sottonodi del database
     private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,7 @@ class ps4_list : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         database = FirebaseDatabase.getInstance().reference
+        database2 = FirebaseDatabase.getInstance().getReference("Giochi")
     }
 
     override fun onCreateView(
@@ -167,7 +169,7 @@ class ps4_list : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-        database.addChildEventListener(childEventListener)
+        database2.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
 
 
         // Imposto il layout manager a lineare per avere scrolling in una direzione
