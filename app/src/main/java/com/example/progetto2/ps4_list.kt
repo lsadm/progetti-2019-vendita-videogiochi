@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_ps4_list.*
 
@@ -35,6 +36,7 @@ class ps4_list : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var auth : FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var database2: DatabaseReference   //mi serve per leggermi i sottonodi del database
     private val TAG = "MainActivity"
@@ -47,6 +49,7 @@ class ps4_list : Fragment() {
         }
         database = FirebaseDatabase.getInstance().reference
         database2 = FirebaseDatabase.getInstance().getReference("Giochi")
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
@@ -176,7 +179,12 @@ class ps4_list : Fragment() {
         lista_giochi.layoutManager = LinearLayoutManager(activity)
 
         floatingActionButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(R.id.action_ps4_list_to_fragment_inserimento)
+            if (auth.currentUser != null) {
+                Navigation.findNavController(it).navigate(R.id.action_ps4_list_to_fragment_inserimento)
+            }
+            else {
+                Navigation.findNavController(it).navigate(R.id.action_home_to_fragment_impostazioni)
+            }
         }
     }
 }

@@ -3,4 +3,5 @@
 
     <item android:title="@string/login" android:id="@+id/fragment_login"
           android:icon="@drawable/ic_settings_black_24dp"/>
+    <item android:title="@string/Logout" android:id="@+id/button_logout"/>
 </menu>

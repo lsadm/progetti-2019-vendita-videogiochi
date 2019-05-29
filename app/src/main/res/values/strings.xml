@@ -18,5 +18,6 @@
     <string name="Autologin">Accesso automatico</string>
     <string name="Password">Password</string>
     <string name="newaccount">Creazione nuovo account</string>
+    <string name="Logout">Logout</string>
 
 </resources>
