@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             tools:context=".dettaglio_gioco" android:id="@+id/frameLayout2">
+    <TextView
+            android:text="Nome"
+            android:layout_width="153dp"
+            android:layout_height="47dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="80dp" android:id="@+id/nome_dettaglio"/>
+    <TextView
+            android:text="prezzo"
+            android:layout_width="100dp"
+            android:layout_height="43dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/prezzo_dettaglio" app:layout_constraintTop_toBottomOf="@+id/nome_dettaglio"
+            android:layout_marginTop="56dp" app:layout_constraintHorizontal_bias="0.498"/>
+    <TextView
+            android:text="Luogo"
+            android:layout_width="123dp"
+            android:layout_height="51dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/luogo_dettaglio" android:layout_marginTop="84dp"
+            app:layout_constraintTop_toBottomOf="@+id/prezzo_dettaglio"/>
+</android.support.constraint.ConstraintLayout>

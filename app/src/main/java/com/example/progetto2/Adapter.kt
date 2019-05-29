@@ -1,10 +1,11 @@
 package com.example.progetto2
 
 import android.content.Context
-import android.net.Uri
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 
 class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
@@ -27,5 +28,14 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
         viewHolder.Nome.text = gioco?.nome
         viewHolder.Prezzo.text= gioco?.prezzo.toString()
         viewHolder.Luogo.text= gioco?.luogo
+
+        // Imposto il listner per passare a visualizzare il dettaglio
+        viewHolder.itemView.setOnClickListener {
+
+            // Creo un bundle e vi inserisco la birra da visualizzare
+            val b = Bundle()
+            b.putParcelable("gioco",gioco)     //TODO: Il nome dell'ogggetto andrebbe inserito in un solo punto!!
+            Navigation.findNavController(it).navigate(R.id.action_ps4_list_to_dettaglio_gioco, b)
+        }
     }
 }

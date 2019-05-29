@@ -21,5 +21,5 @@
             android:id="@+id/lista_giochi" tools:listitem="@layout/riga"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" android:scrollbars="vertical"/>
 </android.support.constraint.ConstraintLayout>
