@@ -6,10 +6,13 @@
                                              android:layout_height="match_parent"
                                              tools:context=".AreaPersonale" android:id="@+id/fragment_area_personale">
     <android.support.v7.widget.RecyclerView
-            android:layout_width="395dp"
-            android:layout_height="587dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             tools:listitem="@layout/riga" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/lista_mieigiochi"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/lista_mieigiochi"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+    />
 </android.support.constraint.ConstraintLayout>

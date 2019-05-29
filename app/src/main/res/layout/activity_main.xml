@@ -13,9 +13,10 @@
             android:layout_height="0dp" app:navGraph="@navigation/nav_graph" app:defaultNavHost="true"
             android:id="@+id/navHost"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"/>
     <android.support.design.widget.BottomNavigationView
-            android:layout_width="414dp"
+            android:layout_width="0dp"
             android:layout_height="49dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/bottom_navigation" android:background="@color/colorPrimaryDark"

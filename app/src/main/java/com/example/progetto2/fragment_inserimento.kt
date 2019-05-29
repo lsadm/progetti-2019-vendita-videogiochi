@@ -9,12 +9,14 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
 import com.google.firebase.auth.FirebaseAuth
 import java.io.ByteArrayOutputStream
+import java.lang.Thread.sleep
 
 
 class fragment_inserimento : Fragment() {
@@ -83,14 +85,16 @@ class fragment_inserimento : Fragment() {
                     uploadTask.addOnFailureListener {
                         Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
                     }.addOnSuccessListener {
-                        Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                        //non mi serve a nulla
                     }
                 }
-                else {
+                else { //se alcuni campi sono vuoti non posso caricare il gioco
                         Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
                      }
                 }
             }
+        Navigation.findNavController(view!!).navigateUp()
         return super.onOptionsItemSelected(item)
     }
     /**
