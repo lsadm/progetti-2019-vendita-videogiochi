@@ -29,7 +29,7 @@ class dettaglio_gioco : Fragment() {
             birra?.let {
                 nome_dettaglio.text = it.nome
                 luogo_dettaglio.text = it.luogo
-                prezzo_dettaglio.text = String.format("%d", it.prezzo)
+                prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"
             }
         }
     }
