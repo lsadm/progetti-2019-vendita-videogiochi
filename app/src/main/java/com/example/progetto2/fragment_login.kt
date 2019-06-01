@@ -68,6 +68,7 @@ class fragment_impostazioni : Fragment() {
     fun updateUI(usr : FirebaseUser?){
         if (usr!= null){
             Toast.makeText(activity,"Utente loggato", Toast.LENGTH_LONG).show()
+            Navigation.findNavController(view!!).navigateUp() //torno alla schermata precedente
         }
     }
 
