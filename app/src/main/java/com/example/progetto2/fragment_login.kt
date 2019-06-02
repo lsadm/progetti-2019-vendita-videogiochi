@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
