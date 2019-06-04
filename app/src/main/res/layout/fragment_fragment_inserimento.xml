@@ -74,4 +74,25 @@
             app:layout_constraintBottom_toBottomOf="@+id/prezzo_gioco"
             android:hint="Luogo" app:layout_constraintStart_toEndOf="@+id/prezzo_gioco"
             android:layout_marginStart="56dp"/>
+    <CheckBox
+            android:text="@string/check1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkPs4" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="22dp"
+            android:layout_marginTop="60dp" app:layout_constraintTop_toBottomOf="@+id/prezzo_gioco"/>
+    <CheckBox
+            android:text="@string/check2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkXbox" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/checkPs4" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="22dp"/>
+    <CheckBox
+            android:text="@string/Check3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkNintendo" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/checkXbox" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="22dp"
+    />
 </android.support.constraint.ConstraintLayout>

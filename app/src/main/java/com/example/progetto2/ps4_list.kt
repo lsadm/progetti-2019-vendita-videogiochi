@@ -38,7 +38,9 @@ class ps4_list : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var auth : FirebaseAuth
     private lateinit var database: DatabaseReference
-    private lateinit var database2: DatabaseReference   //mi serve per leggermi i sottonodi del database
+    private lateinit var database_ps4: DatabaseReference   //mi serve per leggermi i sottonodi del database
+    private lateinit var database_xbox: DatabaseReference   //mi serve per leggermi i sottonodi del database
+    private lateinit var database_nintendo: DatabaseReference   //mi serve per leggermi i sottonodi del database
     private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +50,9 @@ class ps4_list : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         database = FirebaseDatabase.getInstance().reference
-        database2 = FirebaseDatabase.getInstance().getReference("Giochi")
+        database_ps4 = FirebaseDatabase.getInstance().getReference("Giochi").child("Ps4")
+        database_xbox = FirebaseDatabase.getInstance().getReference("Giochi").child("Xbox")
+        database_nintendo = FirebaseDatabase.getInstance().getReference("Giochi").child("Nintendo")
         auth = FirebaseAuth.getInstance()
     }
 
@@ -172,7 +176,9 @@ class ps4_list : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-        database2.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        database_ps4.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        database_xbox.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        database_nintendo.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
 
 
         // Imposto il layout manager a lineare per avere scrolling in una direzione

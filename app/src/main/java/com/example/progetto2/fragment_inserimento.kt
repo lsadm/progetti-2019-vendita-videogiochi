@@ -66,11 +66,43 @@ class fragment_inserimento : Fragment() {
                 val auth = FirebaseAuth.getInstance()
                 val id = auth.currentUser?.uid
 
-                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null) {
+                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null && (checkPs4.isChecked || checkXbox.isChecked || checkNintendo.isChecked)) {
                     val database = FirebaseDatabase.getInstance().reference
                     database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo))   //carico nel database nell'area riservata
-                    val key = database.child("Giochi").push()  //questa push mi restituisce un identificativo unico del percorso creato
-                    key.setValue(Gioco(nome, prezzo.toInt(), luogo))    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                    if (checkPs4.isChecked) {
+                        val key = database.child("Giochi").child("Ps4")
+                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
+                        key.setValue(
+                            Gioco(
+                                nome,
+                                prezzo.toInt(),
+                                luogo
+                            )
+                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                    }
+                    if (checkXbox.isChecked) {
+                        val key = database.child("Giochi").child("Xbox")
+                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
+                        key.setValue(
+                            Gioco(
+                                nome,
+                                prezzo.toInt(),
+                                luogo
+                            )
+                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                    }
+                    if (checkNintendo.isChecked) {
+                        val key = database.child("Giochi").child("Nintendo")
+                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
+                        key.setValue(
+                            Gioco(
+                                nome,
+                                prezzo.toInt(),
+                                luogo
+                            )
+                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                    }
+
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
@@ -88,13 +120,14 @@ class fragment_inserimento : Fragment() {
                         //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
                         //non mi serve a nulla
                     }
+                    Navigation.findNavController(view!!).navigateUp()
                 }
                 else { //se alcuni campi sono vuoti non posso caricare il gioco
                         Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
                      }
                 }
             }
-        Navigation.findNavController(view!!).navigateUp()
+
         return super.onOptionsItemSelected(item)
     }
     /**

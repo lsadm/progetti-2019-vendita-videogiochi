@@ -20,5 +20,8 @@
     <string name="newaccount">Creazione nuovo account</string>
     <string name="Logout">Logout</string>
     <string name="reserved">Area Personale</string>
+    <string name="check1">Ps4</string>
+    <string name="check2">Xbox</string>
+    <string name="Check3">Nintendo</string>
 
 </resources>
