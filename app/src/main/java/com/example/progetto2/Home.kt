@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.support.v7.app.AppCompatActivity
-
-
+import com.example.progetto2.datamodel.flag
+import com.google.android.gms.flags.Flag
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,12 +52,15 @@ class Home : Fragment() {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.GONE
         ps4Button.setOnClickListener {
+            flag = 1
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
         }
         xboxButton.setOnClickListener {
+            flag = 2
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
         }
         nintendoButton.setOnClickListener {
+            flag = 3
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
         }
 

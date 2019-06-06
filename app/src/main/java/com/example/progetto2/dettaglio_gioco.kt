@@ -25,8 +25,8 @@ class dettaglio_gioco : Fragment() {
 
         // Estraggo il parametro (gioco) dal bundle ed eventualmente lo visualizzo
         arguments?.let {
-            val birra: Gioco? = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
-            birra?.let {
+            val gioco : Gioco? = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
+            gioco?.let {
                 nome_dettaglio.text = it.nome
                 luogo_dettaglio.text = it.luogo
                 prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"

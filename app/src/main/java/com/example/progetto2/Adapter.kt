@@ -32,7 +32,7 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamant
         // Imposto il listner per passare a visualizzare il dettaglio
         viewHolder.itemView.setOnClickListener {
 
-            // Creo un bundle e vi inserisco la birra da visualizzare
+            // Creo un bundle e vi inserisco il gioco da visualizzare
             val b = Bundle()
             b.putParcelable("gioco",gioco)     //TODO: Il nome dell'ogggetto andrebbe inserito in un solo punto!!
             //ho due recycle view quindi per distinguerle uso questo parametro "chiamante"
