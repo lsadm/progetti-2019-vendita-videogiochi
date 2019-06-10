@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import java.io.ByteArrayOutputStream
 import java.lang.Thread.sleep
 
@@ -65,12 +66,12 @@ class fragment_inserimento : Fragment() {
                 val prezzo = prezzo_gioco.text.toString()
                 val auth = FirebaseAuth.getInstance()
                 val id = auth.currentUser?.uid
+                var key : DatabaseReference? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null && (checkPs4.isChecked || checkXbox.isChecked || checkNintendo.isChecked)) {
                     val database = FirebaseDatabase.getInstance().reference
-                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo))   //carico nel database nell'area riservata
                     if (checkPs4.isChecked) {
-                        val key = database.child("Giochi").child("Ps4")
+                        key = database.child("Giochi").child("Ps4")
                             .push()  //questa push mi restituisce un identificativo unico del percorso creato
                         key.setValue(
                             Gioco(
@@ -97,7 +98,7 @@ class fragment_inserimento : Fragment() {
                         }
                     }
                     if (checkXbox.isChecked) {
-                        val key = database.child("Giochi").child("Xbox")
+                        key = database.child("Giochi").child("Xbox")
                             .push()  //questa push mi restituisce un identificativo unico del percorso creato
                         key.setValue(
                             Gioco(
@@ -124,7 +125,7 @@ class fragment_inserimento : Fragment() {
                         }
                     }
                     if (checkNintendo.isChecked) {
-                        val key = database.child("Giochi").child("Nintendo")
+                         key = database.child("Giochi").child("Nintendo")
                             .push()  //questa push mi restituisce un identificativo unico del percorso creato
                         key.setValue(
                             Gioco(
@@ -150,7 +151,7 @@ class fragment_inserimento : Fragment() {
                             //non mi serve a nulla
                         }
                     }
-
+                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key.toString()))   //carico nel database nell'area riservata
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
