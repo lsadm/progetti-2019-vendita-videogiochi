@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.example.progetto2.datamodel.flag
-import com.google.android.gms.flags.Flag
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_ps4_list.*
@@ -68,7 +67,6 @@ class ps4_list : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(activity,String.format("flag = %d", flag),Toast.LENGTH_SHORT).show()
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()

@@ -76,9 +76,25 @@ class fragment_inserimento : Fragment() {
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
-                                luogo
+                                luogo,
+                                key.toString()
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                        val storageRef = FirebaseStorage.getInstance().getReference()
+                        // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
+                        val mountainsRef = storageRef.child(key.toString())
+
+                        val bitmap = (foto1.drawable as? BitmapDrawable)?.bitmap
+                        val baos = ByteArrayOutputStream()
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                        val data = baos.toByteArray()
+                        var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
+                        uploadTask.addOnFailureListener {
+                            Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
+                        }.addOnSuccessListener {
+                            //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                            //non mi serve a nulla
+                        }
                     }
                     if (checkXbox.isChecked) {
                         val key = database.child("Giochi").child("Xbox")
@@ -87,9 +103,25 @@ class fragment_inserimento : Fragment() {
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
-                                luogo
+                                luogo,
+                                key.toString()
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                        val storageRef = FirebaseStorage.getInstance().getReference()
+                        // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
+                        val mountainsRef = storageRef.child(key.toString())
+
+                        val bitmap = (foto1.drawable as? BitmapDrawable)?.bitmap
+                        val baos = ByteArrayOutputStream()
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                        val data = baos.toByteArray()
+                        var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
+                        uploadTask.addOnFailureListener {
+                            Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
+                        }.addOnSuccessListener {
+                            //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                            //non mi serve a nulla
+                        }
                     }
                     if (checkNintendo.isChecked) {
                         val key = database.child("Giochi").child("Nintendo")
@@ -98,28 +130,30 @@ class fragment_inserimento : Fragment() {
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
-                                luogo
+                                luogo,
+                                key.toString()
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
+                        val storageRef = FirebaseStorage.getInstance().getReference()
+                        // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
+                        val mountainsRef = storageRef.child(key.toString())
+
+                        val bitmap = (foto1.drawable as? BitmapDrawable)?.bitmap
+                        val baos = ByteArrayOutputStream()
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                        val data = baos.toByteArray()
+                        var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
+                        uploadTask.addOnFailureListener {
+                            Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
+                        }.addOnSuccessListener {
+                            //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                            //non mi serve a nulla
+                        }
                     }
 
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
-                    val storageRef = FirebaseStorage.getInstance().getReference()
-                    // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
-                    val mountainsRef = storageRef.child(nome)
-                    val bitmap = (foto1.drawable as? BitmapDrawable)?.bitmap
-                    val baos = ByteArrayOutputStream()
-                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                    val data = baos.toByteArray()
-                    var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
-                    uploadTask.addOnFailureListener {
-                        Toast.makeText(activity,"Foto non inserita correttamente",Toast.LENGTH_SHORT).show()
-                    }.addOnSuccessListener {
-                        //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
-                        //non mi serve a nulla
-                    }
                     Navigation.findNavController(view!!).navigateUp()
                 }
                 else { //se alcuni campi sono vuoti non posso caricare il gioco

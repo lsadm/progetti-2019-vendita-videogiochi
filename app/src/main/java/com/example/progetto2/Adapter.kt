@@ -1,14 +1,24 @@
 package com.example.progetto2
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.example.progetto2.datamodel.Gioco
+import com.example.progetto2.datamodel.flag
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 
 class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamante: Int) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
+    val storageRef = FirebaseStorage.getInstance().getReference()
 
     // Invocata per creare un ViewHolder
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RigaGiocoViewHolder {
@@ -24,10 +34,21 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamant
     // Invocata per visualizzare all'interno del ViewHolder il dato corrispondente alla riga
     override fun onBindViewHolder(viewHolder: RigaGiocoViewHolder, position: Int) {
         val gioco = dataset.get(position)
+        val imagRef = storageRef.child(gioco?.key.toString())
 
         viewHolder.Nome.text = gioco?.nome
         viewHolder.Prezzo.text= gioco?.prezzo.toString()
         viewHolder.Luogo.text= gioco?.luogo
+        imagRef.getBytes(Long.MAX_VALUE).addOnSuccessListener {
+            // Use the bytes to display the image
+            val bitmap = BitmapFactory.decodeByteArray(it,0,it.size)
+            viewHolder.Immagine.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
+
+
+
 
         // Imposto il listner per passare a visualizzare il dettaglio
         viewHolder.itemView.setOnClickListener {
