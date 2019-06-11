@@ -6,4 +6,5 @@
     <color name="xbox">#107C10</color>
     <color name="ps">#004097</color>
     <color name="nintendo">#DD0001</color>
+    <color name="bottomNav">#F1F1F1</color>
 </resources>

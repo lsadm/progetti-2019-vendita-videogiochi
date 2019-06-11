@@ -19,8 +19,11 @@
             android:layout_width="0dp"
             android:layout_height="49dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/bottom_navigation" android:background="@color/colorPrimaryDark"
-            android:id="@+id/bottomNavigation" android:animationCache="false"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:menu="@menu/bottom_navigation" android:background="@color/bottomNav"
+            android:id="@+id/bottomNavigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:itemTextColor="@color/common_google_signin_btn_text_dark_focused"
+            app:labelVisibilityMode="auto"
+    />
 
 </android.support.constraint.ConstraintLayout>
