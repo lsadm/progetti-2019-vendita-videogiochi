@@ -39,8 +39,9 @@ class fragment_impostazioni : Fragment() {
     var auth = FirebaseAuth.getInstance()
     var user: FirebaseUser? = null
     // Chiavi nelle preferenze
-    private val PREF_NAME = "MiscDemo"      // Nome del file
+    private val PREF_NAME = "Vendita-videogiochi"      // Nome del file
     private val PREF_USERNAME = "Username"
+    private val PREF_PASSWORD = "Password"
     private val PREF_AUTOLOGIN = "AutoLogin"
 
     private lateinit var sharedPref: SharedPreferences
@@ -107,8 +108,13 @@ class fragment_impostazioni : Fragment() {
         v?.visibility = View.GONE
         sharedPref = activity!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         leggiImpostazioni()
+        if (chkAutoLogin.isChecked){
+            if (campivalidi()){
+                signIn(email.text.toString(), password.text.toString())
+            }
+        }
         btnConferma.setOnClickListener {
-            if (email.text.toString().length > 0 && password.text.toString().length > 0) {
+            if (campivalidi()) {
                 salvaImpostazioni()
                 signIn(email.text.toString(), password.text.toString())
             } else {
@@ -123,11 +129,24 @@ class fragment_impostazioni : Fragment() {
         }
     }
 
+    private fun campivalidi() : Boolean{
+        if (email.text.toString().length > 0 && password.text.toString().length > 0){
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
     private fun salvaImpostazioni() {
         val editor = sharedPref.edit()
 
         val username = email.text.toString()
         editor.putString(PREF_USERNAME, username)
+
+        val password = password.text.toString()
+        editor.putString(PREF_PASSWORD,password)
 
         val autoLogin = chkAutoLogin.isChecked
         editor.putBoolean(PREF_AUTOLOGIN, autoLogin)
@@ -142,6 +161,10 @@ class fragment_impostazioni : Fragment() {
     private fun leggiImpostazioni() {
         val username = sharedPref.getString(PREF_USERNAME, "")
         email.setText(username)
+
+        val pass = sharedPref.getString(PREF_PASSWORD,"")
+        password.setText(pass)
+
 
         val autoLogin = sharedPref.getBoolean(PREF_AUTOLOGIN, false)
         chkAutoLogin.isChecked = autoLogin
