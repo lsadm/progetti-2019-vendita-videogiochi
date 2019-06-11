@@ -82,7 +82,7 @@ class fragment_impostazioni : Fragment() {
     }
 
 
-    private fun signIn(email: String, password: String) {
+    fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(MainActivity()) { task ->
                 if (task.isSuccessful) {
@@ -108,11 +108,6 @@ class fragment_impostazioni : Fragment() {
         v?.visibility = View.GONE
         sharedPref = activity!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         leggiImpostazioni()
-        if (chkAutoLogin.isChecked){
-            if (campivalidi()){
-                signIn(email.text.toString(), password.text.toString())
-            }
-        }
         btnConferma.setOnClickListener {
             if (campivalidi()) {
                 salvaImpostazioni()

@@ -1,24 +1,36 @@
 package com.example.progetto2
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Checkable
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.example.progetto2.datamodel.Loggato
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_fragment_login.*
 
 class MainActivity : AppCompatActivity() {
+    private val PREF_NAME = "Vendita-videogiochi"      // Nome del file
+    private val PREF_USERNAME = "Username"
+    private val PREF_PASSWORD = "Password"
+    private val PREF_AUTOLOGIN = "AutoLogin"
+
     lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // Setup Navigation controller cono bottoNavigation
         auth = FirebaseAuth.getInstance()
+        trylogin() //verifico se è inserita la spunta di autologin e nel caso lo effettuo
         bottomNavigation.setupWithNavController(Navigation.findNavController(this, R.id.navHost))
     }
     /**
@@ -50,5 +62,38 @@ class MainActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        auth.signOut()
+    }
+
+    private fun trylogin(){
+        val sharedPref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val pass = sharedPref.getString(PREF_PASSWORD,"")
+        val username = sharedPref.getString(PREF_USERNAME, "")
+        val autoLogin = sharedPref.getBoolean(PREF_AUTOLOGIN, false)
+        if (autoLogin && username!= null && pass!=null){
+            signIn(username,pass)
+        }
+    }
+    fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(MainActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("MainActivity", "signInWithEmail:success")
+                    Toast.makeText(baseContext, "Utente loggato", Toast.LENGTH_SHORT).show()
+                    invalidateOptionsMenu() //dopo il logout invalido il menu, così viene richiamato onCreateOptionsMenu
+
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("MainActivity", "signInWithEmail:failure", task.exception)
+                    Toast.makeText(baseContext, "Autenticazione fallita", Toast.LENGTH_SHORT).show()
+                }
+
+                // ...
+            }
     }
 }
