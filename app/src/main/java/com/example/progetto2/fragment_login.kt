@@ -1,6 +1,7 @@
 package com.example.progetto2
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -35,10 +36,14 @@ class fragment_impostazioni : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
     var auth = FirebaseAuth.getInstance()
-    var user : FirebaseUser? = null
+    var user: FirebaseUser? = null
+    // Chiavi nelle preferenze
+    private val PREF_NAME = "MiscDemo"      // Nome del file
+    private val PREF_USERNAME = "Username"
+    private val PREF_AUTOLOGIN = "AutoLogin"
 
+    private lateinit var sharedPref: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +57,7 @@ class fragment_impostazioni : Fragment() {
 
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,21 +66,22 @@ class fragment_impostazioni : Fragment() {
         return inflater.inflate(R.layout.fragment_fragment_login, container, false)
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.getCurrentUser()
-       // updateUI(currentUser)
+        // updateUI(currentUser)
     }
-    fun updateUI(usr : FirebaseUser?){
-        if (usr!= null){
-            Toast.makeText(activity,"Utente loggato", Toast.LENGTH_LONG).show()
+
+    private fun updateUI(usr: FirebaseUser?) {
+        if (usr != null) {
+            Toast.makeText(activity, "Utente loggato", Toast.LENGTH_LONG).show()
             Navigation.findNavController(view!!).navigateUp() //torno alla schermata precedente
         }
     }
 
 
-    fun signIn(email : String, password: String){
+    private fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(MainActivity()) { task ->
                 if (task.isSuccessful) {
@@ -85,7 +92,7 @@ class fragment_impostazioni : Fragment() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("MainActivity", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(activity,"Autenticazione fallita", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Autenticazione fallita", Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
 
@@ -94,85 +101,56 @@ class fragment_impostazioni : Fragment() {
     }
 
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
-        v?.visibility=View.GONE
-        btnConferma.setOnClickListener{
-            if (email.text.toString().length>0 && password.text.toString().length >0) {
+        v?.visibility = View.GONE
+        sharedPref = activity!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        leggiImpostazioni()
+        btnConferma.setOnClickListener {
+            if (email.text.toString().length > 0 && password.text.toString().length > 0) {
+                salvaImpostazioni()
                 signIn(email.text.toString(), password.text.toString())
-            }
-            else {
-                Toast.makeText(activity,"Email o password troppo breve",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, "Email o password troppo breve", Toast.LENGTH_SHORT).show()
             }
         }
-        newaccountbtn.setOnClickListener{
+        newaccountbtn.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_fragment_login_to_newaccount)
         }
-        btnAnnulla.setOnClickListener{
+        btnAnnulla.setOnClickListener {
             Navigation.findNavController(it).navigateUp()
         }
     }
+
+    private fun salvaImpostazioni() {
+        val editor = sharedPref.edit()
+
+        val username = email.text.toString()
+        editor.putString(PREF_USERNAME, username)
+
+        val autoLogin = chkAutoLogin.isChecked
+        editor.putBoolean(PREF_AUTOLOGIN, autoLogin)
+
+        editor.apply()    // Salva le modifiche
+    }
+
+    /**
+     * Legge le impostazioni e le visualizza
+     * nella form
+     */
+    private fun leggiImpostazioni() {
+        val username = sharedPref.getString(PREF_USERNAME, "")
+        email.setText(username)
+
+        val autoLogin = sharedPref.getBoolean(PREF_AUTOLOGIN, false)
+        chkAutoLogin.isChecked = autoLogin
+    }
+
 
     //questa funzione rende invisibile il menu nel fragment impostazioni
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment fragment_impostazioni.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            fragment_impostazioni().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
