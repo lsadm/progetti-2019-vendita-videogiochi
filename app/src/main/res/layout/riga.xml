@@ -16,14 +16,14 @@
     />
     <ImageView
             android:layout_width="128dp"
-            android:layout_height="wrap_content" tools:srcCompat="@drawable/loading"
+            android:layout_height="wrap_content" tools:srcCompat="@drawable/gameicon"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp" android:id="@+id/game_picture"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:contentDescription="@string/game_picture" android:adjustViewBounds="true"
             android:drawingCacheQuality="high"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="visible" app:srcCompat="@drawable/loading"/>
+            android:visibility="visible" app:srcCompat="@drawable/gameicon"/>
     <TextView
             android:text="@string/defaults"
             android:layout_width="39dp"
