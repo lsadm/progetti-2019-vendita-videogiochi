@@ -32,7 +32,7 @@ class dettaglio_gioco : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-        id = auth.currentUser!!.uid
+        id = auth.currentUser?.uid.toString()
     }
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ class dettaglio_gioco : Fragment() {
                 })
                 builder.setPositiveButton(R.string.PositiveButton,DialogInterface.OnClickListener { _, which ->
                     nodoRef.child("Giochi").child(gioco!!.console.toString()).child(gioco!!.key.toString()).removeValue()
-                    nodoRef.child("users").child(auth.currentUser!!.uid).child(gioco!!.nome.toString()).removeValue()
+                    nodoRef.child("users").child(auth.currentUser!!.uid).child("mygames").child(gioco!!.nome.toString()).removeValue()
                     for (i in 0 .. 2) {
                         storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                             .child("picture" + i.toString()).delete()
