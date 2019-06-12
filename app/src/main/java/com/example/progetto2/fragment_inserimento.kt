@@ -81,53 +81,59 @@ class fragment_inserimento : Fragment() {
                 val prezzo = prezzo_gioco.text.toString()
                 val auth = FirebaseAuth.getInstance()
                 val id = auth.currentUser?.uid
-                var key : DatabaseReference? = null
+                var key : String? = null
+                var path : String ? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null && (checkPs4.isChecked || checkXbox.isChecked || checkNintendo.isChecked)) {
                     val database = FirebaseDatabase.getInstance().reference
                     if (checkPs4.isChecked) {
                         key = database.child("Giochi").child("Ps4")
-                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
-                        key.setValue(
+                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
+                        database.child("Giochi").child("Ps4").child(key.toString()).setValue(
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString(),
-                                id
+                                key,
+                                id,
+                                "Ps4"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        caricaFoto(key.toString())
+                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Ps4"))   //carico nel database nell'area riservata
+                        caricaFoto(key.toString(),"Ps4")
                     }
                     if (checkXbox.isChecked) {
                         key = database.child("Giochi").child("Xbox")
-                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
-                        key.setValue(
+                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
+                        database.child("Giochi").child("Xbox").child(key.toString()).setValue(
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString(),
-                                id
+                                key,
+                                id,
+                                "Xbox"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        caricaFoto(key.toString())
+                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Xbox"))   //carico nel database nell'area riservata
+                        caricaFoto(key.toString(),"Xbox")
                     }
                     if (checkNintendo.isChecked) {
-                         key = database.child("Giochi").child("Nintendo")
-                            .push()  //questa push mi restituisce un identificativo unico del percorso creato
-                        key.setValue(
+                        key = database.child("Giochi").child("Nintendo")
+                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
+                        database.child("Giochi").child("Nintendo").child(key.toString()).setValue(
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString(),
-                                id
+                                key,
+                                id,
+                                "Nintendo"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        caricaFoto(key.toString())
+                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id,"Nintendo"))   //carico nel database nell'area riservata
+                        caricaFoto(key.toString(),"Nintendo")
                     }
-                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key.toString(),id))   //carico nel database nell'area riservata
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
@@ -141,7 +147,7 @@ class fragment_inserimento : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun caricaFoto(key : String){
+    fun caricaFoto(key : String, console : String){
         val storageRef = FirebaseStorage.getInstance().getReference()
         // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
         val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
@@ -149,7 +155,7 @@ class fragment_inserimento : Fragment() {
         foto.add(foto2)
         foto.add(foto3)
         for (i in 0 .. 2) {
-            val mountainsRef = storageRef.child(key).child("picture" + i.toString())
+            val mountainsRef = storageRef.child(console).child(key).child("picture" + i.toString())
             val bitmap = (foto.get(i).drawable as? BitmapDrawable)?.bitmap
             val baos = ByteArrayOutputStream()
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)

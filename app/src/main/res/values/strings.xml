@@ -25,5 +25,9 @@
     <string name="Check3">Nintendo</string>
     <string name="delete">Elimina</string>
     <string name="Delete">Elimina</string>
+    <string name="modify">Modifica</string>
+    <string name="AlertMessage">Sei sicuro di voler cancellare questo gioco?</string>
+    <string name="PositiveButton">Si</string>
+    <string name="NegativeButton">No</string>
 
 </resources>

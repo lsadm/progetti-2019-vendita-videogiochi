@@ -36,7 +36,7 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamant
     // Invocata per visualizzare all'interno del ViewHolder il dato corrispondente alla riga
     override fun onBindViewHolder(viewHolder: RigaGiocoViewHolder, position: Int) {
         val gioco = dataset.get(position)
-        val imagRef = storageRef.child(gioco?.key.toString()).child("picture0")
+        val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/").child("picture0")
 
         viewHolder.Nome.text = gioco?.nome
         viewHolder.Prezzo.text= gioco?.prezzo.toString()
