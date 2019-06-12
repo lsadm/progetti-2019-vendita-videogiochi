@@ -119,7 +119,7 @@ class AreaPersonale : Fragment() {
             }
         }
         try {
-            database.child(auth.currentUser!!.uid)
+            database.child(auth.currentUser!!.uid).child("mygames")
                 .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
         catch (e : Exception){

@@ -63,9 +63,8 @@ class newaccount : Fragment() {
         menu?.clear()
     }
 
-    fun writeNewUser(user : String?) {   //al momento non serve a nulla questa funzione
-        val usr = User(user)
-        database.child("users").setValue(usr)
+    fun writeNewUser(user : String?, usr : User) {   //al momento non serve a nulla questa funzione
+        database.child("users").child(user.toString()).child("Dati").child("Account").setValue(usr)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,8 +72,8 @@ class newaccount : Fragment() {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.GONE
         btnConferma.setOnClickListener{
-            if (email.text.toString().length>0 && password.text.toString().length >0) {
-                createAccount(email.text.toString(), password.text.toString())
+            if (verificacampi()) {
+                createAccount(email.text.toString(),nome.text.toString(),cellulare.text.toString(), password.text.toString())
             }
             else{
                 Toast.makeText(activity,"Email o password troppo breve",Toast.LENGTH_SHORT).show()
@@ -85,20 +84,31 @@ class newaccount : Fragment() {
         }
     }
 
-    fun createAccount(email : String, password : String) {
+    fun verificacampi() : Boolean{
+        if(email.text.toString().length>0 && password.text.toString().length >0 && nome.text.toString().length > 0 && cellulare.text.toString().length > 0){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
+    fun createAccount(email : String, nome : String , cellulare : String , password : String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(MainActivity()) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser?.uid
-                   // writeNewUser(user)
-                    Toast.makeText(activity,"Utente registrato con successo",Toast.LENGTH_SHORT).show()
+                    val usr = User(cellulare,email,nome)
+                    writeNewUser(user, usr)
+                    Toast.makeText(context,"Utente registrato con successo",Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(view!!).navigateUp()
                  //   updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(activity, "Errore nella registrazione",
+                    Toast.makeText(context, "Errore nella registrazione",
                         Toast.LENGTH_SHORT).show()
                   //  updateUI(null)
                 }

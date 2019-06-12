@@ -85,7 +85,7 @@ class fragment_inserimento : Fragment() {
                 var key : String? = null
                 var path : String ? = null
 
-                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null) {
+                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
                     val database = FirebaseDatabase.getInstance().reference
                     if (flag == 1) {
                         key = database.child("Giochi").child("Ps4")
@@ -100,7 +100,7 @@ class fragment_inserimento : Fragment() {
                                 "Ps4"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Ps4"))   //carico nel database nell'area riservata
+                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Ps4"))   //carico nel database nell'area riservata
                         caricaFoto(key.toString(),"Ps4")
                     }
                     if (flag == 2) {
@@ -116,7 +116,7 @@ class fragment_inserimento : Fragment() {
                                 "Xbox"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Xbox"))   //carico nel database nell'area riservata
+                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Xbox"))   //carico nel database nell'area riservata
                         caricaFoto(key.toString(),"Xbox")
                     }
                     if (flag == 3) {
@@ -132,7 +132,7 @@ class fragment_inserimento : Fragment() {
                                 "Nintendo"
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id,"Nintendo"))   //carico nel database nell'area riservata
+                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id,"Nintendo"))   //carico nel database nell'area riservata
                         caricaFoto(key.toString(),"Nintendo")
                     }
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()

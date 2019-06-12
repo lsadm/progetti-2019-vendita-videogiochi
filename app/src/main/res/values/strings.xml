@@ -29,5 +29,9 @@
     <string name="AlertMessage">Sei sicuro di voler cancellare questo gioco?</string>
     <string name="PositiveButton">Si</string>
     <string name="NegativeButton">No</string>
+    <string name="cell">Cellulare</string>
+    <string name="email">E-mail</string>
+    <string name="Nome">Nome</string>
+    <string name="UserName">Nome</string>
 
 </resources>

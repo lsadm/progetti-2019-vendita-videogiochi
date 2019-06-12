@@ -2,20 +2,22 @@ package com.example.progetto2
 
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.example.progetto2.datamodel.Loggato
+import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
 
@@ -91,6 +93,55 @@ class dettaglio_gioco : Fragment() {
                 nome_dettaglio.text = it.nome
                 luogo_dettaglio.text = it.luogo
                 prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"
+
+                val childEventListener = object : ChildEventListener {
+                    override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                        Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+
+                        val usr = dataSnapshot.getValue(User::class.java)
+                        utente_dettaglio.text = usr?.email
+                        cellulare_dettaglio.text = usr?.cell
+                        // ...
+                    }
+                    override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                        Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
+
+                        // A comment has changed, use the key to determine if we are displaying this
+                        // comment and if so displayed the changed comment.
+                        val newComment = dataSnapshot.getValue(Gioco::class.java)
+                        val commentKey = dataSnapshot.key
+
+                        // ...
+                    }
+
+                    override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                        Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
+
+                        // A comment has changed, use the key to determine if we are displaying this
+                        // comment and if so remove it.
+                        val commentKey = dataSnapshot.key
+
+                        // ...
+                    }
+
+                    override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                        Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
+
+                        // A comment has changed position, use the key to determine if we are
+                        // displaying this comment and if so move it.
+                        val movedComment = dataSnapshot.getValue(Gioco::class.java)
+                        val commentKey = dataSnapshot.key
+
+                        // ...
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.w(TAG, "postComments:onCancelled", databaseError.toException())
+                        Toast.makeText(context, "Failed to load comments.",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+                nodoRef.child("users").child(gioco?.id.toString()).child("Dati").addChildEventListener(childEventListener)
                 val picture = ArrayList<ImageView>()
                 picture.add(picture0)
                 picture.add(picture1)
