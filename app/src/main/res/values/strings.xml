@@ -23,5 +23,7 @@
     <string name="check1">Ps4</string>
     <string name="check2">Xbox</string>
     <string name="Check3">Nintendo</string>
+    <string name="delete">Elimina</string>
+    <string name="Delete">Elimina</string>
 
 </resources>

@@ -93,7 +93,8 @@ class fragment_inserimento : Fragment() {
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString()
+                                key.toString(),
+                                id
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
                         caricaFoto(key.toString())
@@ -106,7 +107,8 @@ class fragment_inserimento : Fragment() {
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString()
+                                key.toString(),
+                                id
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
                         caricaFoto(key.toString())
@@ -119,12 +121,13 @@ class fragment_inserimento : Fragment() {
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
-                                key.toString()
+                                key.toString(),
+                                id
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
                         caricaFoto(key.toString())
                     }
-                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key.toString()))   //carico nel database nell'area riservata
+                    database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key.toString(),id))   //carico nel database nell'area riservata
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
