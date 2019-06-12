@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
+import com.example.progetto2.datamodel.flag
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
@@ -84,9 +85,9 @@ class fragment_inserimento : Fragment() {
                 var key : String? = null
                 var path : String ? = null
 
-                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null && (checkPs4.isChecked || checkXbox.isChecked || checkNintendo.isChecked)) {
+                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null) {
                     val database = FirebaseDatabase.getInstance().reference
-                    if (checkPs4.isChecked) {
+                    if (flag == 1) {
                         key = database.child("Giochi").child("Ps4")
                             .push().key  //questa push mi restituisce un identificativo unico del percorso creato
                         database.child("Giochi").child("Ps4").child(key.toString()).setValue(
@@ -102,7 +103,7 @@ class fragment_inserimento : Fragment() {
                         database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Ps4"))   //carico nel database nell'area riservata
                         caricaFoto(key.toString(),"Ps4")
                     }
-                    if (checkXbox.isChecked) {
+                    if (flag == 2) {
                         key = database.child("Giochi").child("Xbox")
                             .push().key  //questa push mi restituisce un identificativo unico del percorso creato
                         database.child("Giochi").child("Xbox").child(key.toString()).setValue(
@@ -118,7 +119,7 @@ class fragment_inserimento : Fragment() {
                         database.child("users").child(id).child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Xbox"))   //carico nel database nell'area riservata
                         caricaFoto(key.toString(),"Xbox")
                     }
-                    if (checkNintendo.isChecked) {
+                    if (flag == 3) {
                         key = database.child("Giochi").child("Nintendo")
                             .push().key  //questa push mi restituisce un identificativo unico del percorso creato
                         database.child("Giochi").child("Nintendo").child(key.toString()).setValue(

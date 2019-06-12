@@ -47,7 +47,6 @@ class dettaglio_gioco : Fragment() {
                 val builder = AlertDialog.Builder(activity as AppCompatActivity)
                 builder.setTitle(R.string.AlertMessage)
                 builder.setNegativeButton(R.string.NegativeButton,DialogInterface.OnClickListener { _, which ->
-                    Toast.makeText(activity,"non eliminato",Toast.LENGTH_SHORT).show()
                 })
                 builder.setPositiveButton(R.string.PositiveButton,DialogInterface.OnClickListener { _, which ->
                     nodoRef.child("Giochi").child(gioco!!.console.toString()).child(gioco!!.key.toString()).removeValue()
