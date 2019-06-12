@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.progetto2.datamodel.Gioco
 import com.example.progetto2.datamodel.flag
 import com.google.firebase.database.FirebaseDatabase
@@ -19,6 +20,7 @@ import java.io.File
 
 class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamante: Int) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
     val storageRef = FirebaseStorage.getInstance().getReference()
+
 
     // Invocata per creare un ViewHolder
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RigaGiocoViewHolder {
@@ -39,20 +41,21 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamant
         viewHolder.Nome.text = gioco?.nome
         viewHolder.Prezzo.text= gioco?.prezzo.toString()
         viewHolder.Luogo.text= gioco?.luogo
-        imagRef.getBytes(Long.MAX_VALUE).addOnSuccessListener {
-            // Use the bytes to display the image
-            val bitmap = BitmapFactory.decodeByteArray(it,0,it.size)
+
+        imagRef.downloadUrl.addOnSuccessListener {
+            GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
+        }
+
+        /*val localFile = File.createTempFile("img","jpg")
+        imagRef.getFile(localFile).addOnSuccessListener {
+            val bitmap=BitmapFactory.decodeFile(localFile.absolutePath)
             viewHolder.Immagine.setImageBitmap(bitmap)
         }.addOnFailureListener {
             // Handle any errors
-        }
-
-
-
+        }*/
 
         // Imposto il listner per passare a visualizzare il dettaglio
         viewHolder.itemView.setOnClickListener {
-
             // Creo un bundle e vi inserisco il gioco da visualizzare
             val b = Bundle()
             b.putParcelable("gioco",gioco)     //TODO: Il nome dell'ogggetto andrebbe inserito in un solo punto!!
