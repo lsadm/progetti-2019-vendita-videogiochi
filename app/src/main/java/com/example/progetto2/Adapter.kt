@@ -44,7 +44,6 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context, val chiamant
 
         imagRef.downloadUrl.addOnSuccessListener {
             GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
-            notifyDataSetChanged()
         }
 
         /*val localFile = File.createTempFile("img","jpg")
