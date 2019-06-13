@@ -30,7 +30,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     val storageRef = FirebaseStorage.getInstance().getReference()
     val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
     var gioco : Gioco? =null
-    var console : String? = null
+    var console_spinner : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +69,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 nome_gioco.setText(gioco?.nome)
                 prezzo_gioco.setText(gioco?.prezzo.toString())
                 luogo_gioco.setText(gioco?.luogo)
+                spinner.visibility = View.GONE  //nascondo spinner nella modifica
                 for(i in 0..2) {
                     val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                     imagRef.child("picture"+i.toString()).downloadUrl.addOnSuccessListener {
@@ -126,10 +127,13 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 val auth = FirebaseAuth.getInstance()
                 val id = auth.currentUser?.uid
                 var key : String? = null
+                var key_user : String? = null
+                var console : String? = null
                 var path : String ? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
                         key = get_key(console.toString())
+                        console = get_console()
                         database.child("Giochi").child(console.toString()).child(key.toString()).setValue(
                             Gioco(
                                 nome,
@@ -140,7 +144,15 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                                 console
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, console.toString()))   //carico nel database nell'area riservata
+                       database.child("users").child(id).child("mygames").child(key.toString()).setValue(
+                           Gioco(
+                               nome,
+                               prezzo.toInt(),
+                               luogo,
+                               key,
+                               id,
+                               console
+                           ))  //carico nel database nell'area riservata
                         caricaFoto(key.toString(),console.toString())
 
 
@@ -208,8 +220,20 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+
+    //funzione usata per distinguere i due casi: creazione e modifica
+    private fun get_console() : String? {
+        if(mod==0) {
+            return console_spinner
+        }
+        else {
+            return gioco?.console
+        }
+    }
+
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        console = parent?.getItemAtPosition(position).toString()
+        console_spinner = parent?.getItemAtPosition(position).toString()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

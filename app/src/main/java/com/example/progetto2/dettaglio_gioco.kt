@@ -52,7 +52,7 @@ class dettaglio_gioco : Fragment() {
                 })
                 builder.setPositiveButton(R.string.PositiveButton,DialogInterface.OnClickListener { _, which ->
                     nodoRef.child("Giochi").child(gioco!!.console.toString()).child(gioco!!.key.toString()).removeValue()
-                    nodoRef.child("users").child(auth.currentUser!!.uid).child("mygames").child(gioco!!.nome.toString()).removeValue()
+                    nodoRef.child("users").child(auth.currentUser!!.uid).child("mygames").child(gioco!!.key.toString()).removeValue()
                     for (i in 0 .. 2) {
                         storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                             .child("picture" + i.toString()).delete()
