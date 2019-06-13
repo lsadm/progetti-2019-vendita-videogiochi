@@ -103,12 +103,9 @@ class ps4_list : Fragment() {
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
                 val g = dataSnapshot.getValue(Gioco::class.java)
-                val key = dataSnapshot.key.toString()
-                val index = keys.indexOf(key) //ottengo l'indice del gioco aggiornato
-                keys.removeAt(index)
-                games.removeAt(index)
-                //adapter.notifyDataSetChanged()
-                adapter.notifyItemRemoved(games.indexOf(g))
+                val index = games.indexOf(g)
+                games.remove(g)
+                adapter.notifyItemRemoved(index)
                 // ...
             }
 
