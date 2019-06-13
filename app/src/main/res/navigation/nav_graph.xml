@@ -37,5 +37,8 @@
                 app:destination="@id/dettaglio_gioco"/>
     </fragment>
     <fragment android:id="@+id/dettaglio_gioco" android:name="com.example.progetto2.dettaglio_gioco"
-              android:label="fragment_dettaglio_gioco" tools:layout="@layout/fragment_dettaglio_gioco"/>
+              android:label="fragment_dettaglio_gioco" tools:layout="@layout/fragment_dettaglio_gioco">
+        <action android:id="@+id/action_dettaglio_gioco_to_fragment_inserimento"
+                app:destination="@id/fragment_inserimento"/>
+    </fragment>
 </navigation>

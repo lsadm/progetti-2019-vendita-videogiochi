@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -104,6 +105,7 @@ class fragment_impostazioni : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Login")
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility = View.GONE
         sharedPref = activity!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -118,9 +120,6 @@ class fragment_impostazioni : Fragment() {
         }
         newaccountbtn.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_fragment_login_to_newaccount)
-        }
-        btnAnnulla.setOnClickListener {
-            Navigation.findNavController(it).navigateUp()
         }
     }
 
@@ -170,5 +169,10 @@ class fragment_impostazioni : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
     }
 }

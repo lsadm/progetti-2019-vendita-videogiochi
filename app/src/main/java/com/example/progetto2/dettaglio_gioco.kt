@@ -61,6 +61,11 @@ class dettaglio_gioco : Fragment() {
                 })
                 builder.show()
             }
+            R.id.Modifica -> {
+                val b = Bundle()
+                b.putParcelable("gioco",gioco)
+                Navigation.findNavController(view!!).navigate(R.id.action_dettaglio_gioco_to_fragment_inserimento,b)
+            }
             else -> return false
         }
         return true

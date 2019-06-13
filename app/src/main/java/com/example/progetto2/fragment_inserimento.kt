@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
@@ -49,6 +50,7 @@ class fragment_inserimento : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         v?.visibility=View.GONE
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
         val takePhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -184,6 +186,11 @@ class fragment_inserimento : Fragment() {
                3 -> foto3.setImageBitmap(immagineCatturata)
            }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
     }
 }
 

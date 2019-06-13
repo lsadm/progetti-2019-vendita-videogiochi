@@ -17,7 +17,7 @@
     <string name="Username">Username</string>
     <string name="Autologin">Accesso automatico</string>
     <string name="Password">Password</string>
-    <string name="newaccount">Creazione nuovo account</string>
+    <string name="newaccount">Nuovo account</string>
     <string name="Logout">Logout</string>
     <string name="reserved">Area Personale</string>
     <string name="check1">Ps4</string>
@@ -33,5 +33,6 @@
     <string name="email">E-mail</string>
     <string name="Nome">Nome</string>
     <string name="UserName">Nome</string>
+    <string name="accedi">accedi</string>
 
 </resources>
