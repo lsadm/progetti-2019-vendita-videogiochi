@@ -61,11 +61,11 @@ class AreaPersonale : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        super.onViewCreated(view, savedInstanceState)
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()
-        val adapter = Adapter(games,requireContext(),1)
+        val keys = ArrayList<String>()
+        val adapter = Adapter(games,requireContext(),0)
         lista_mieigiochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {
@@ -75,6 +75,7 @@ class AreaPersonale : Fragment() {
                 // A new comment has been added, add it to the displayed list
                 val g = dataSnapshot.getValue(Gioco::class.java)
                 games.add(g)
+                keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
                 adapter.notifyDataSetChanged()
 
                 // ...
@@ -82,22 +83,19 @@ class AreaPersonale : Fragment() {
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                val newComment = dataSnapshot.getValue(Gioco::class.java)
-                val commentKey = dataSnapshot.key
+                val g = dataSnapshot.getValue(Gioco::class.java)
+                val index = keys.indexOf(dataSnapshot.key.toString()) //ottengo l'indice del gioco aggiornato
+                games.set(index,g)
+                adapter.notifyDataSetChanged()
 
                 // ...
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                val commentKey = dataSnapshot.key
-
+                val g = dataSnapshot.getValue(Gioco::class.java)
+                games.remove(g)
+                adapter.notifyItemRemoved(games.indexOf(g))
                 // ...
             }
 

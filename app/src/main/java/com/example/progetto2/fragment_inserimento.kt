@@ -126,10 +126,8 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 val prezzo = prezzo_gioco.text.toString()
                 val auth = FirebaseAuth.getInstance()
                 val id = auth.currentUser?.uid
-                var key : String? = null
-                var key_user : String? = null
+                var key : String?
                 var console : String? = null
-                var path : String ? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
                         key = get_key(console.toString())
