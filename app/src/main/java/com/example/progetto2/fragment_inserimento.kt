@@ -10,8 +10,7 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.*
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.navigation.Navigation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.progetto2.datamodel.Gioco
@@ -25,10 +24,13 @@ import java.io.ByteArrayOutputStream
 import java.lang.Thread.sleep
 
 
-class fragment_inserimento : Fragment() {
+class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
+    var mod = 0
     val database = FirebaseDatabase.getInstance().reference
     val storageRef = FirebaseStorage.getInstance().getReference()
     val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
+    var gioco : Gioco? =null
+    var console : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +63,12 @@ class fragment_inserimento : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         v?.visibility=View.GONE
         arguments?.let{//modifico il gioco
-            val gioco : Gioco? = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
+            mod = 1
+            gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
             gioco?.let {
-                nome_gioco.setText(gioco.nome)
-                prezzo_gioco.setText(gioco.prezzo.toString())
-                luogo_gioco.setText(gioco.luogo)
+                nome_gioco.setText(gioco?.nome)
+                prezzo_gioco.setText(gioco?.prezzo.toString())
+                luogo_gioco.setText(gioco?.luogo)
                 for(i in 0..2) {
                     val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                     imagRef.child("picture"+i.toString()).downloadUrl.addOnSuccessListener {
@@ -99,6 +102,20 @@ class fragment_inserimento : Fragment() {
                 startActivityForResult(takePhoto, REQUEST_IMAGE_CAPTURE)
             }
         }
+        //spinner
+        val spinner: Spinner = activity!!.findViewById(R.id.spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            context,
+            R.array.console_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            spinner.onItemSelectedListener = this
+        }
 
     }
     //inserimento annuncio, con tasto in alto a destra
@@ -112,54 +129,21 @@ class fragment_inserimento : Fragment() {
                 var path : String ? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
-                    if (flag == 1) {
-                        key = database.child("Giochi").child("Ps4")
-                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
-                        database.child("Giochi").child("Ps4").child(key.toString()).setValue(
+                        key = get_key(console.toString())
+                        database.child("Giochi").child(console.toString()).child(key.toString()).setValue(
                             Gioco(
                                 nome,
                                 prezzo.toInt(),
                                 luogo,
                                 key,
                                 id,
-                                "Ps4"
+                                console
                             )
                         )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Ps4"))   //carico nel database nell'area riservata
-                        caricaFoto(key.toString(),"Ps4")
-                    }
-                    if (flag == 2) {
-                        key = database.child("Giochi").child("Xbox")
-                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
-                        database.child("Giochi").child("Xbox").child(key.toString()).setValue(
-                            Gioco(
-                                nome,
-                                prezzo.toInt(),
-                                luogo,
-                                key,
-                                id,
-                                "Xbox"
-                            )
-                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, "Xbox"))   //carico nel database nell'area riservata
-                        caricaFoto(key.toString(),"Xbox")
-                    }
-                    if (flag == 3) {
-                        key = database.child("Giochi").child("Nintendo")
-                            .push().key  //questa push mi restituisce un identificativo unico del percorso creato
-                        database.child("Giochi").child("Nintendo").child(key.toString()).setValue(
-                            Gioco(
-                                nome,
-                                prezzo.toInt(),
-                                luogo,
-                                key,
-                                id,
-                                "Nintendo"
-                            )
-                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id,"Nintendo"))   //carico nel database nell'area riservata
-                        caricaFoto(key.toString(),"Nintendo")
-                    }
+                        database.child("users").child(id).child("mygames").child(nome).setValue(Gioco(nome, prezzo.toInt(), luogo,key,id, console.toString()))   //carico nel database nell'area riservata
+                        caricaFoto(key.toString(),console.toString())
+
+
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
@@ -211,6 +195,25 @@ class fragment_inserimento : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
+    }
+
+    //funzione usata per distinguere i due casi: creazione e modifica
+    private fun get_key(console:String) : String? {
+        if(mod==0) {
+            return database.child("Giochi").child(console)
+                .push().key  //questa push mi restituisce un identificativo unico del percorso creato
+        }
+        else {
+            return gioco?.key
+        }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        console = parent?.getItemAtPosition(position).toString()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
     }
 }
 
