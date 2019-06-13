@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils.indexOf
 import android.util.Log
@@ -71,6 +72,9 @@ class ps4_list : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lista_giochi.addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL)) //separatori tra righe
+
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()

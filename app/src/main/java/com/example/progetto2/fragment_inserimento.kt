@@ -157,7 +157,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                     Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                     //carica le foto inserite dell'annuncio sul database
                     // Create a storage reference from our app
-                    Navigation.findNavController(view!!).navigateUp()
+                    Navigation.findNavController(view!!).navigate(R.id.action_fragment_inserimento_to_ps4_list)
                 }
                 else { //se alcuni campi sono vuoti non posso caricare il gioco
                         Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()

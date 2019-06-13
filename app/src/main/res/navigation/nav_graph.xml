@@ -26,7 +26,9 @@
         <action android:id="@+id/action_fragment_login_to_newaccount" app:destination="@id/newaccount"/>
     </fragment>
     <fragment android:id="@+id/fragment_inserimento" android:name="com.example.progetto2.fragment_inserimento"
-              android:label="fragment_fragment_inserimento" tools:layout="@layout/fragment_fragment_inserimento"/>
+              android:label="fragment_fragment_inserimento" tools:layout="@layout/fragment_fragment_inserimento">
+        <action android:id="@+id/action_fragment_inserimento_to_ps4_list" app:destination="@id/ps4_list"/>
+    </fragment>
     <fragment android:id="@+id/newaccount" android:name="com.example.progetto2.newaccount"
               android:label="fragment_newaccount" tools:layout="@layout/fragment_newaccount"/>
     <fragment android:id="@+id/fragment_area_personale" android:name="com.example.progetto2.AreaPersonale"
