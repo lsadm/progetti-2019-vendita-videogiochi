@@ -3,6 +3,7 @@ package com.example.progetto2
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,6 +13,7 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.progetto2.datamodel.Gioco
 import com.example.progetto2.datamodel.flag
 import com.google.firebase.database.FirebaseDatabase
@@ -24,6 +26,9 @@ import java.lang.Thread.sleep
 
 
 class fragment_inserimento : Fragment() {
+    val database = FirebaseDatabase.getInstance().reference
+    val storageRef = FirebaseStorage.getInstance().getReference()
+    val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +54,28 @@ class fragment_inserimento : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        foto.add(foto1)
+        foto.add(foto2)
+        foto.add(foto3)
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         v?.visibility=View.GONE
+        arguments?.let{//modifico il gioco
+            val gioco : Gioco? = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
+            gioco?.let {
+                nome_gioco.setText(gioco.nome)
+                prezzo_gioco.setText(gioco.prezzo.toString())
+                luogo_gioco.setText(gioco.luogo)
+                for(i in 0..2) {
+                    val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
+                    imagRef.child("picture"+i.toString()).downloadUrl.addOnSuccessListener {
+                        GlideApp.with(this).load(it).into(foto.get(i))
+                    }.addOnFailureListener {
+                        // Handle any errors
+                    }
+                }
+                }
+        }
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
         val takePhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         foto1.setOnClickListener {
@@ -88,7 +112,6 @@ class fragment_inserimento : Fragment() {
                 var path : String ? = null
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
-                    val database = FirebaseDatabase.getInstance().reference
                     if (flag == 1) {
                         key = database.child("Giochi").child("Ps4")
                             .push().key  //questa push mi restituisce un identificativo unico del percorso creato
@@ -151,24 +174,21 @@ class fragment_inserimento : Fragment() {
     }
 
     fun caricaFoto(key : String, console : String){
-        val storageRef = FirebaseStorage.getInstance().getReference()
         // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
-        val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
-        foto.add(foto1)
-        foto.add(foto2)
-        foto.add(foto3)
         for (i in 0 .. 2) {
             val mountainsRef = storageRef.child(console).child(key).child("picture" + i.toString())
             val bitmap = (foto.get(i).drawable as? BitmapDrawable)?.bitmap
             val baos = ByteArrayOutputStream()
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             val data = baos.toByteArray()
-            var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
-            uploadTask.addOnFailureListener {
-                Toast.makeText(activity, "Foto non inserita correttamente", Toast.LENGTH_SHORT).show()
-            }.addOnSuccessListener {
-                //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
-                //non mi serve a nulla
+            if(data.isNotEmpty()) {
+                var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
+                uploadTask.addOnFailureListener {
+                    Toast.makeText(activity, "Foto non inserita correttamente", Toast.LENGTH_SHORT).show()
+                }.addOnSuccessListener {
+                    //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
+                    //non mi serve a nulla
+                }
             }
         }
     }
