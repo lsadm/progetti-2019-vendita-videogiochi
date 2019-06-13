@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils.indexOf
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -80,12 +81,11 @@ class ps4_list : Fragment() {
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
-
                 // A new comment has been added, add it to the displayed list
                 val g = dataSnapshot.getValue(Gioco::class.java)
                 games.add(g)
                 keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemInserted(games.indexOf(g))
 
                 // ...
             }

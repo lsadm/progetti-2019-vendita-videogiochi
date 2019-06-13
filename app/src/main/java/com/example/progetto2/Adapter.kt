@@ -34,9 +34,9 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
         viewHolder.Prezzo.text= gioco?.prezzo.toString()
         viewHolder.Luogo.text= gioco?.luogo
 
-        imagRef.downloadUrl.addOnSuccessListener {
-            GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
-        }
+            imagRef.downloadUrl.addOnSuccessListener {
+                GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
+            }
 
         // Imposto il listner per passare a visualizzare il dettaglio
         viewHolder.itemView.setOnClickListener {

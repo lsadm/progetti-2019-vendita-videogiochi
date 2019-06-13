@@ -76,7 +76,7 @@ class AreaPersonale : Fragment() {
                 val g = dataSnapshot.getValue(Gioco::class.java)
                 games.add(g)
                 keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemInserted(games.indexOf(g))
 
                 // ...
             }
