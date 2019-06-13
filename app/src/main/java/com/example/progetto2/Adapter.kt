@@ -31,7 +31,7 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
         val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/").child("picture0")
 
         viewHolder.Nome.text = gioco?.nome
-        viewHolder.Prezzo.text= gioco?.prezzo.toString()
+        viewHolder.Prezzo.text= gioco?.prezzo.toString()+"€"
         viewHolder.Luogo.text= gioco?.luogo
 
             imagRef.downloadUrl.addOnSuccessListener {

@@ -7,59 +7,61 @@
     <ImageView
             android:layout_width="110dp"
             android:layout_height="wrap_content" tools:src="@tools:sample/avatars"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="5dp"
             android:id="@+id/picture0"
-            app:layout_constraintTop_toBottomOf="@+id/luogo_dettaglio" android:adjustViewBounds="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/luogo_dettaglio" android:adjustViewBounds="true"
+            android:layout_marginTop="20dp"/>
     <ImageView
             android:layout_width="110dp"
             android:layout_height="wrap_content" tools:src="@tools:sample/avatars"
             android:id="@+id/picture1"
             app:layout_constraintBottom_toBottomOf="@+id/picture0"
-            app:layout_constraintStart_toEndOf="@+id/picture0" android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@+id/picture0" android:layout_marginStart="40dp"
             android:adjustViewBounds="true" app:layout_constraintEnd_toStartOf="@+id/picture2"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="40dp"/>
     <TextView
             android:text="Nome"
-            android:layout_width="355dp"
-            android:layout_height="52dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp" android:id="@+id/nome_dettaglio"
-            android:layout_marginStart="16dp" android:textSize="30sp" android:textStyle="bold"/>
+            android:layout_marginStart="16dp" android:textSize="30sp" android:textStyle="bold"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
     <TextView
             android:text="prezzo"
-            android:layout_width="115dp"
-            android:layout_height="52dp"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/prezzo_dettaglio" app:layout_constraintTop_toBottomOf="@+id/nome_dettaglio"
-            app:layout_constraintHorizontal_bias="0.054" android:textSize="24sp"
-            android:textColor="@color/nintendo"/>
+            android:textSize="24sp"
+            android:textColor="@color/nintendo" android:layout_marginTop="10dp" android:layout_marginStart="16dp"/>
     <TextView
             android:text="Luogo"
-            android:layout_width="123dp"
-            android:layout_height="51dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/luogo_dettaglio"
-            app:layout_constraintTop_toBottomOf="@+id/prezzo_dettaglio" android:layout_marginStart="16dp"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/prezzo_dettaglio" android:layout_marginStart="148dp"
+            app:layout_constraintBottom_toBottomOf="@+id/prezzo_dettaglio"/>
     <ImageView
             android:layout_width="110dp"
             android:layout_height="wrap_content" tools:src="@tools:sample/avatars"
             android:id="@+id/picture2"
             app:layout_constraintBottom_toBottomOf="@+id/picture1"
-            android:adjustViewBounds="true" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+            android:adjustViewBounds="true" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="5dp"/>
     <TextView
             android:text="@string/cell"
-            android:layout_width="355dp"
-            android:layout_height="58dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/cellulare_dettaglio"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp" android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/utente_dettaglio"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/utente_dettaglio" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/picture1"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp" app:layout_constraintTop_toBottomOf="@+id/picture1"
             android:hint="@string/email"/>
 </android.support.constraint.ConstraintLayout>
