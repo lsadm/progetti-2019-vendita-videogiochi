@@ -74,7 +74,7 @@ class ps4_list : Fragment() {
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()
         val keys = ArrayList<String>()
-        val adapter = Adapter(games,requireContext(),0)
+        val adapter = Adapter(games,requireContext())
         lista_giochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {

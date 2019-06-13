@@ -15,7 +15,7 @@
               android:label="fragment_ps4_list" tools:layout="@layout/fragment_ps4_list">
         <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"/>
         <action android:id="@+id/action_ps4_list_to_fragment_inserimento" app:destination="@id/fragment_inserimento"/>
-        <action android:id="@+id/action_ps4_list_to_dettaglio_gioco" app:destination="@id/dettaglio_gioco"/>
+        <action android:id="@+id/action_to_dettaglio_gioco" app:destination="@id/dettaglio_gioco"/>
     </fragment>
     <fragment android:id="@+id/ps4_news" android:name="com.example.progetto2.ps4_news" android:label="fragment_ps4_news"
               tools:layout="@layout/fragment_ps4_news">
@@ -33,7 +33,7 @@
               android:label="fragment_area_personale" tools:layout="@layout/fragment_area_personale">
         <action android:id="@+id/action_home_to_fragment_impostazioni"
                 app:destination="@id/fragment_login"/>
-        <action android:id="@+id/action_fragment_area_personale_to_dettaglio_gioco"
+        <action android:id="@+id/action_to_dettaglio_gioco"
                 app:destination="@id/dettaglio_gioco"/>
     </fragment>
     <fragment android:id="@+id/dettaglio_gioco" android:name="com.example.progetto2.dettaglio_gioco"

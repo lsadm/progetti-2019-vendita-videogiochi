@@ -65,7 +65,7 @@ class AreaPersonale : Fragment() {
         v?.visibility=View.VISIBLE
         val games=ArrayList<Gioco?>()
         val keys = ArrayList<String>()
-        val adapter = Adapter(games,requireContext(),0)
+        val adapter = Adapter(games,requireContext())
         lista_mieigiochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {
@@ -94,8 +94,9 @@ class AreaPersonale : Fragment() {
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
                 val g = dataSnapshot.getValue(Gioco::class.java)
+                val index = games.indexOf(g)
                 games.remove(g)
-                adapter.notifyItemRemoved(games.indexOf(g))
+                adapter.notifyItemRemoved(index)
                 // ...
             }
 
