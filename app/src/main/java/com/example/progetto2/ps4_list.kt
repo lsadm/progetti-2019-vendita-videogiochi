@@ -41,7 +41,7 @@ class ps4_list : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var auth : FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var database_ps4: DatabaseReference   //mi serve per leggermi i sottonodi del database
     private lateinit var database_xbox: DatabaseReference   //mi serve per leggermi i sottonodi del database
@@ -72,13 +72,18 @@ class ps4_list : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lista_giochi.addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL)) //separatori tra righe
+        lista_giochi.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        ) //separatori tra righe
 
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
-        v?.visibility=View.VISIBLE
-        val games=ArrayList<Gioco?>()
+        v?.visibility = View.VISIBLE
+        val games = ArrayList<Gioco?>()
         val keys = ArrayList<String>()
-        val adapter = Adapter(games,requireContext())
+        val adapter = Adapter(games, requireContext())
         lista_giochi.adapter = adapter
 
         val childEventListener = object : ChildEventListener {
@@ -97,7 +102,7 @@ class ps4_list : Fragment() {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
                 val g = dataSnapshot.getValue(Gioco::class.java)
                 val index = keys.indexOf(dataSnapshot.key.toString()) //ottengo l'indice del gioco aggiornato
-                games.set(index,g)
+                games.set(index, g)
                 adapter.notifyDataSetChanged()
 
                 // ...
@@ -125,8 +130,10 @@ class ps4_list : Fragment() {
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException())
-                Toast.makeText(context, "Failed to load comments.",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context, "Failed to load comments.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         if (flag == 1) {
@@ -135,21 +142,86 @@ class ps4_list : Fragment() {
         if (flag == 2) {
             database_xbox.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
-        if (flag == 3){
+        if (flag == 3) {
             database_nintendo.addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
-
-
         // Imposto il layout manager a lineare per avere scrolling in una direzione
         lista_giochi.layoutManager = LinearLayoutManager(activity)
 
-        floatingActionButton.setOnClickListener{
+        floatingActionButton.setOnClickListener {
             if (auth.currentUser != null) {
                 Navigation.findNavController(it).navigate(R.id.action_ps4_list_to_fragment_inserimento)
-            }
-            else {
+            } else {
                 Navigation.findNavController(it).navigate(R.id.action_home_to_fragment_impostazioni)
             }
         }
     }
+
+    fun domyquery(query: String) {
+        val games = ArrayList<Gioco?>()
+        val keys = ArrayList<String>()
+        val adapter = Adapter(games, requireContext())
+        lista_giochi.adapter = adapter
+
+        val childEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+                // A new comment has been added, add it to the displayed list
+                val g = dataSnapshot.getValue(Gioco::class.java)
+                games.add(g)
+                keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
+                adapter.notifyItemInserted(games.indexOf(g))
+
+                // ...
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
+                val g = dataSnapshot.getValue(Gioco::class.java)
+                val index = keys.indexOf(dataSnapshot.key.toString()) //ottengo l'indice del gioco aggiornato
+                games.set(index, g)
+                adapter.notifyDataSetChanged()
+
+                // ...
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
+                val g = dataSnapshot.getValue(Gioco::class.java)
+                val index = games.indexOf(g)
+                games.remove(g)
+                adapter.notifyItemRemoved(index)
+                // ...
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
+
+                // A comment has changed position, use the key to determine if we are
+                // displaying this comment and if so move it.
+                val movedComment = dataSnapshot.getValue(Gioco::class.java)
+                val commentKey = dataSnapshot.key
+
+                // ...
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
+                Toast.makeText(
+                    context, "Failed to load comments.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        if (flag == 1) {
+            database_ps4.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener)   //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        }
+        if (flag == 2) {
+            database_xbox.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener) //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        }
+        if (flag == 3) {
+            database_nintendo.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+        }
+    }
+
 }
