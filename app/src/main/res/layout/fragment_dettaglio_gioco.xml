@@ -4,6 +4,18 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              tools:context=".dettaglio_gioco" android:id="@+id/frameLayout2">
+    <Button
+            android:text="@string/cell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cellulare_dettaglio" tools:text="@string/cell"
+            android:textAlignment="viewStart" style="@android:style/Widget.Material.Light.Button.Borderless.Small"
+            android:textStyle="normal|italic"
+            android:textColor="@color/common_google_signin_btn_text_light_pressed"
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/utente_dettaglio" app:layout_constraintStart_toStartOf="parent"
+            android:textSize="14sp" android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAllCaps="false"/>
     <ImageView
             android:layout_width="110dp"
             android:layout_height="wrap_content" tools:src="@tools:sample/avatars"
@@ -49,19 +61,14 @@
             android:id="@+id/picture2"
             app:layout_constraintBottom_toBottomOf="@+id/picture1"
             android:adjustViewBounds="true" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="5dp"/>
-    <TextView
-            android:text="@string/cell"
+    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cellulare_dettaglio"
+            android:id="@+id/utente_dettaglio" tools:text="@string/email"
+            android:textAlignment="viewStart" style="@android:style/Widget.Material.Light.Button.Borderless.Small"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp" android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/utente_dettaglio"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/utente_dettaglio" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp" app:layout_constraintTop_toBottomOf="@+id/picture1"
-            android:hint="@string/email"/>
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/picture0" android:textStyle="normal|italic"
+            android:textColor="@color/common_google_signin_btn_text_light_pressed" android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 </android.support.constraint.ConstraintLayout>
