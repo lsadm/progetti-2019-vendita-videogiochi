@@ -40,6 +40,7 @@ class dettaglio_gioco : Fragment() {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         id = auth.currentUser?.uid.toString()
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(

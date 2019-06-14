@@ -47,7 +47,7 @@ class AreaPersonale : Fragment() {
         }
         database = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
-
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -60,7 +60,7 @@ class AreaPersonale : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu?.clear()
+            menu?.removeItem(R.id.app_bar_search)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

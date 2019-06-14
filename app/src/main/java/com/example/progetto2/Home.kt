@@ -10,6 +10,7 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.flag
 import com.google.android.gms.flags.Flag
 
@@ -35,8 +36,8 @@ class Home : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
-
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -70,6 +71,17 @@ class Home : Fragment() {
         }
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu?.clear()
+        if(Loggato().usr==null) { //se non è loggato esce login
+            inflater?.inflate(R.menu.button_login, menu)
+        }
+        else { //altrimenti logout
+            inflater?.inflate(R.menu.button_logout, menu)
+        }
     }
 
 
