@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import java.io.ByteArrayOutputStream
 import java.lang.Thread.sleep
+import java.util.concurrent.Semaphore
 
 
 class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
@@ -31,6 +32,9 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
     var gioco : Gioco? =null
     var console_spinner : String? = null
+    var x = intArrayOf(0,0,0)
+    var foto_fatte : Int =0
+    var foto_caricate : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +66,10 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         v?.visibility=View.GONE
-        arguments?.let{//modifico il gioco
+        arguments?.let{
+            //modifico il gioco
             mod = 1
+
             gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
             gioco?.let {
                 nome_gioco.setText(gioco?.nome)
@@ -73,11 +79,13 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 for(i in 0..2) {
                     val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                     imagRef.child("picture"+i.toString()).downloadUrl.addOnSuccessListener {
+                        x[i]=1
                         GlideApp.with(this).load(it).into(foto.get(i))
                     }.addOnFailureListener {
                         // Handle any errors
                     }
                 }
+                foto_fatte=x[0]+x[1]+x[2]
                 }
         }
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
@@ -128,6 +136,10 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 val id = auth.currentUser?.uid
                 var key : String?
                 var console : String? = null
+                gioco?.nome=nome
+                gioco?.luogo = luogo
+        gioco?.prezzo=prezzo.toInt()
+
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
                         key = get_key(console.toString())
@@ -151,13 +163,13 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                                id,
                                console
                            ))  //carico nel database nell'area riservata
-                        caricaFoto(key.toString(),console.toString())
 
-
-                    Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
-                    //carica le foto inserite dell'annuncio sul database
-                    // Create a storage reference from our app
-                    Navigation.findNavController(view!!).navigate(R.id.action_fragment_inserimento_to_ps4_list)
+                    Toast.makeText(activity,"Caricamento in corso", Toast.LENGTH_SHORT).show()
+                    if(foto_fatte!=0) { //se ci sono foto da caricare
+                            caricaFoto(key.toString(),console.toString())
+                        }
+                    else Navigation.findNavController(view!!).navigateUp()
+                    //Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
                 }
                 else { //se alcuni campi sono vuoti non posso caricare il gioco
                         Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
@@ -176,12 +188,15 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             val data = baos.toByteArray()
             if(data.isNotEmpty()) {
+                //l'utente ha caricato delle foto, quindi bisogna caricarle
                 var uploadTask = mountainsRef.putBytes(data) //carica i byte della foto
-                uploadTask.addOnFailureListener {
+                uploadTask.addOnCompleteListener {
+                    foto_caricate++
+                    //se è l'ultima
+                    if(it.isSuccessful && foto_caricate==foto_fatte) Navigation.findNavController(view!!).navigateUp()
+                }.addOnFailureListener {
                     Toast.makeText(activity, "Foto non inserita correttamente", Toast.LENGTH_SHORT).show()
                 }.addOnSuccessListener {
-                    //Toast.makeText(activity,"Foto inserita correttamente",Toast.LENGTH_SHORT).show()
-                    //non mi serve a nulla
                 }
             }
         }
@@ -191,14 +206,17 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
      * occorre determinare chi aveva generato la richiesta
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {     // Acquisizione immagine
             val immagineCatturata = data?.extras?.get("data") as Bitmap
            when(REQUEST_IMAGE_CAPTURE){
-               1 -> foto1.setImageBitmap(immagineCatturata)
-               2 -> foto2.setImageBitmap(immagineCatturata)
-               3 -> foto3.setImageBitmap(immagineCatturata)
+               1 -> { foto1.setImageBitmap(immagineCatturata) //tiene conto di quante foto caricate
+                   x[0]=1 }
+               2 -> { foto2.setImageBitmap(immagineCatturata)
+                   x[1]=1 }
+               3 -> { foto3.setImageBitmap(immagineCatturata)
+                   x[2]=1 }
            }
+            if(foto_fatte<3) foto_fatte=x[0]+x[1]+x[2]
         }
     }
 
@@ -235,7 +253,6 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-
     }
 }
 

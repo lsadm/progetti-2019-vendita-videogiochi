@@ -18,10 +18,14 @@ import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
 import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.User
+import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.riga.*
 
 
 class dettaglio_gioco : Fragment() {
@@ -30,6 +34,7 @@ class dettaglio_gioco : Fragment() {
     val storageRef = FirebaseStorage.getInstance().getReference()
     val nodoRef = FirebaseDatabase.getInstance().reference
     var gioco : Gioco? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,18 +93,43 @@ class dettaglio_gioco : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Estraggo il parametro (gioco) dal bundle ed eventualmente lo visualizzo
         arguments?.let {
+
             gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
             gioco?.let {
                 val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                 if (gioco?.id == id) {
                     setHasOptionsMenu(true)
                 }
-                nome_dettaglio.text = it.nome
-                luogo_dettaglio.text = it.luogo
-                prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"
+
+                //devo leggerli dal database
+                val myRef = FirebaseDatabase.getInstance().getReference("Giochi").child(gioco?.console.toString())/*.child(gioco?.key.toString())*/
+                fun loadList(callback: (list: List<Gioco>) -> Unit) {
+                    myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(snapshotError: DatabaseError) {
+                            TODO("not implemented")
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val list : MutableList<Gioco> = mutableListOf()
+                            val children = snapshot!!.children
+                            children.forEach {
+                                list.add(it.getValue(Gioco::class.java)!!)
+                            }
+                            callback(list)
+                        }
+                    })
+                }
+                loadList {
+                    nome_dettaglio.text = it.get(it.indexOf(gioco!!)).nome
+                    luogo_dettaglio.text = it.get(it.indexOf(gioco!!)).luogo
+                    prezzo_dettaglio.text = String.format("%d", it.get(it.indexOf(gioco!!)).prezzo)+"€"
+                }
+
+                //nome_dettaglio.text = list.get(0).nome
+               // luogo_dettaglio.text = it.luogo
+                //prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"
 
                 val childEventListener = object : ChildEventListener {
                     override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
