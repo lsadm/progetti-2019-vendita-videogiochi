@@ -7,6 +7,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +23,12 @@ import com.example.progetto2.datamodel.Loggato
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_fragment_login.*
+import android.support.v4.view.MenuItemCompat.setOnActionExpandListener
+import android.widget.ImageView
+import android.support.v4.view.MenuItemCompat.setOnActionExpandListener
+
+
+
 
 class MainActivity : AppCompatActivity() {
     private val PREF_NAME = "Vendita-videogiochi"      // Nome del file
@@ -59,9 +66,30 @@ class MainActivity : AppCompatActivity() {
         (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
             // Assumes current activity is the searchable activity
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
+            isQueryRefinementEnabled = true
         }
+        val search_menuItem = menu.findItem(R.id.app_bar_search)
+        search_menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                // Do whatever you need
+                return true // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean { //quando clicco su indietro viene ricreato il fragment list
+                // Do whatever you need
+                val NavHost  = supportFragmentManager.fragments.get(0) as NavHostFragment
+                val fragment = NavHost.childFragmentManager.fragments.get(0) as ps4_list
+                supportFragmentManager.beginTransaction().detach(fragment).attach(fragment).commit()
+
+                return true // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
+            }
+        })
         return true
     }
+
+
 
     /**
      * Processa le voci del menu
@@ -117,6 +145,7 @@ class MainActivity : AppCompatActivity() {
                 // ...
             }
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
