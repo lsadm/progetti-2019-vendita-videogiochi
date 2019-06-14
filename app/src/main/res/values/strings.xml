@@ -34,5 +34,6 @@
     <string name="Nome">Nome</string>
     <string name="UserName">Nome</string>
     <string name="accedi">accedi</string>
+    <string name="Search">Cosa stai cercando ?</string>
 
 </resources>

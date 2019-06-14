@@ -1,5 +1,6 @@
 package com.example.progetto2
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Checkable
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
@@ -36,13 +38,25 @@ class MainActivity : AppCompatActivity() {
     /**
      * Invocata quando occorre creare un menu
      */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Imposta il menu dal file di risorse
         if(Loggato().usr==null) { //se non è loggato esce login
             menuInflater.inflate(R.menu.button_login, menu)
+            //menuInflater.inflate(R.menu.search, menu)
         }
         else { //altrimenti logout
             menuInflater.inflate(R.menu.button_logout, menu)
+           // menuInflater.inflate(R.menu.search, menu)
+        }
+        // Inflate the options menu from XML
+        val inflater = menuInflater
+        inflater.inflate(R.menu.search, menu)
+        // Get the SearchView and set the searchable configuration
+       val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
+            // Assumes current activity is the searchable activity
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
         }
         return true
     }

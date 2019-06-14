@@ -72,7 +72,6 @@ class ps4_list : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         lista_giochi.addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL)) //separatori tra righe
 
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
