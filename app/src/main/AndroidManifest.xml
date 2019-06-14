@@ -22,5 +22,5 @@
                        android:resource="@xml/searchable"/>
         </activity>
     </application>
-
+    <uses-permission android:name="android.permision.CALL_PHONE"></uses-permission>
 </manifest>
