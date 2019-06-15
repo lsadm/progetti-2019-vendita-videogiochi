@@ -9,7 +9,7 @@
     <EditText
             android:layout_width="300dp"
             android:layout_height="0dp"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textEmailAddress"
             android:ems="10"
             android:id="@+id/email"
             android:hint="@string/Username"

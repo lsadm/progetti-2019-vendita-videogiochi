@@ -6,13 +6,71 @@
                                              android:layout_height="match_parent"
                                              tools:context=".AreaPersonale" android:id="@+id/fragment_area_personale">
     <android.support.v7.widget.RecyclerView
-            android:layout_width="0dp"
+            android:layout_width="413dp"
             android:layout_height="0dp"
             tools:listitem="@layout/riga" app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/lista_mieigiochi"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" android:layout_marginTop="8dp"/>
+    <TextView
+            android:text="Tuoi dati:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp" android:id="@+id/textView" android:textSize="18sp"
+            android:textStyle="bold" android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
+    <TextView
+            android:text="Tuoi giochi:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView11" android:textSize="18sp"
+            android:textStyle="bold" android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp" android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"/>
+    <TextView
+            android:text="Numero di telefono:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="10dp"
+            android:id="@+id/textView4" android:textSize="14sp" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    <TextView
+            android:text="Email:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="10dp"
+            android:id="@+id/textView6" app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:layout_marginTop="16dp"/>
+    <TextView
+            android:text="Annunci online:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="10dp"
+            android:id="@+id/textView7" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+    <TextView
+            android:text="@string/defaults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cell"
+            app:layout_constraintStart_toEndOf="@+id/textView4" android:layout_marginStart="28dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"/>
+    <TextView
+            android:text="@string/defaults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6" app:layout_constraintStart_toEndOf="@+id/textView6"
+            android:layout_marginStart="116dp"/>
+    <TextView
+            android:text="@string/defaults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/annunci"
+            app:layout_constraintBottom_toBottomOf="@+id/textView7" app:layout_constraintStart_toEndOf="@+id/textView7"
+            android:layout_marginStart="56dp"/>
 </android.support.constraint.ConstraintLayout>
