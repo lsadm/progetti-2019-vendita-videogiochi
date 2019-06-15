@@ -6,6 +6,8 @@ import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -91,11 +93,15 @@ class dettaglio_gioco : Fragment() {
         setHasOptionsMenu(true)
         // Estraggo il parametro (gioco) dal bundle ed eventualmente lo visualizzo
         arguments?.let {
-
-            gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
+            gioco = it.getParcelable("gioco")
             gioco?.let {
+
+                if(gioco?.console=="Ps4") (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#004097")))
+                if(gioco?.console=="Xbox") (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#107C10")))
+                if(gioco?.console=="Nintendo") (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#DD0001")))
+                (activity as AppCompatActivity).supportActionBar?.setTitle("BuyGames")
                 val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
-                //devo leggerli dal database
+                //li legge dal database utilizzando il gioco passato, così i dati saranno aggiornati anche dopo la modifica
                 val myRef = FirebaseDatabase.getInstance().getReference("Giochi").child(gioco?.console.toString())/*.child(gioco?.key.toString())*/
                 fun loadList(callback: (list: List<Gioco>) -> Unit) {
                     myRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -119,9 +125,6 @@ class dettaglio_gioco : Fragment() {
                     prezzo_dettaglio.text = String.format("%d", it.get(it.indexOf(gioco!!)).prezzo)+"€"
                 }
 
-                //nome_dettaglio.text = list.get(0).nome
-               // luogo_dettaglio.text = it.luogo
-                //prezzo_dettaglio.text = String.format("%d", it.prezzo)+"€"
 
                 val childEventListener = object : ChildEventListener {
                     override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {

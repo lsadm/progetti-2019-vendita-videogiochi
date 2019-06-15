@@ -52,22 +52,21 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
+        (activity as AppCompatActivity).supportActionBar?.setTitle("BuyGames")
+
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.GONE
         ps4Button.setOnClickListener {
             flag = 1
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
-            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#004097")))
         }
         xboxButton.setOnClickListener {
             flag = 2
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
-            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#107C10")))
         }
         nintendoButton.setOnClickListener {
             flag = 3
             Navigation.findNavController(it).navigate(R.id.action_home_to_ps4_list)
-            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#DD0001")))
         }
 
 

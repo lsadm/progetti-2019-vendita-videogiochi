@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
@@ -64,7 +66,6 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         foto.add(foto2)
         foto.add(foto3)
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
-        (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         v?.visibility=View.GONE
         arguments?.let{
             //modifico il gioco
@@ -88,6 +89,14 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 foto_fatte=x[0]+x[1]+x[2]
                 }
         }
+        //se non devo modificare il gioco mostro il colore di default e la scritta inserimento
+        if(mod!=1) {
+            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
+            (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
+        }
+        else (activity as AppCompatActivity).supportActionBar?.setTitle("Modifica gioco")
+        //altrimenti lascio il colore della console e il titolo modifica
+
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
         val takePhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         foto1.setOnClickListener {
@@ -138,7 +147,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 var console : String? = null
                 gioco?.nome=nome
                 gioco?.luogo = luogo
-        gioco?.prezzo=prezzo.toInt()
+                gioco?.prezzo=prezzo.toInt()
 
 
                 if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {

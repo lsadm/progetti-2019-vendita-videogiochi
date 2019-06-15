@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.navigation.Navigation
@@ -22,6 +23,9 @@ import com.example.progetto2.datamodel.flag
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_ps4_list.*
+import android.os.Build
+
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -70,15 +74,20 @@ class ps4_list : Fragment() {
         return inflater.inflate(R.layout.fragment_ps4_list, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //colora l'actionbar con lo stesso colore della piattaforma scelta
+        if(flag==1) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#004097")))
+        if(flag==2) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#107C10")))
+        if(flag==3) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#DD0001")))
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Games")
+        //separatori tra righe
         lista_giochi.addItemDecoration(
             DividerItemDecoration(
                 context,
                 LinearLayoutManager.VERTICAL
             )
-        ) //separatori tra righe
+        )
 
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility = View.VISIBLE

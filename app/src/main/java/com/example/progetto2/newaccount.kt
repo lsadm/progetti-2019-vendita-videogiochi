@@ -1,5 +1,7 @@
 package com.example.progetto2
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -71,6 +73,8 @@ class newaccount : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
+        (activity as AppCompatActivity).supportActionBar?.setTitle("Creazione account")
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility=View.GONE
         btnConferma.setOnClickListener{
@@ -80,9 +84,6 @@ class newaccount : Fragment() {
             else{
                 Toast.makeText(activity,"Email o password troppo breve",Toast.LENGTH_SHORT).show()
             }
-        }
-        btnAnnulla.setOnClickListener {
-            Navigation.findNavController(it).navigateUp()
         }
     }
 
@@ -105,6 +106,8 @@ class newaccount : Fragment() {
                     val usr = User(cellulare,email,nome)
                     writeNewUser(user, usr)
                     Toast.makeText(context,"Utente registrato con successo",Toast.LENGTH_SHORT).show()
+                    //torno direttamente alla lista giochi e non al login
+                    Navigation.findNavController(view!!).navigateUp()
                     Navigation.findNavController(view!!).navigateUp()
                  //   updateUI(user)
                 } else {

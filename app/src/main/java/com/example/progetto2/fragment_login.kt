@@ -2,6 +2,8 @@ package com.example.progetto2
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -105,6 +107,7 @@ class fragment_impostazioni : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
         (activity as AppCompatActivity).supportActionBar?.setTitle("Login")
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
         v?.visibility = View.GONE
