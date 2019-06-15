@@ -40,7 +40,6 @@ class dettaglio_gioco : Fragment() {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         id = auth.currentUser?.uid.toString()
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -82,28 +81,20 @@ class dettaglio_gioco : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?){
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
-        inflater?.inflate(R.menu.menu_modifica, menu)
-        if(Loggato().usr==null) { //se non è loggato esce login
-            inflater?.inflate(R.menu.button_login, menu)
+        if (gioco?.id == id) {
+            inflater?.inflate(R.menu.menu_modifica, menu)
         }
-        else { //altrimenti logout
-            inflater?.inflate(R.menu.button_logout, menu)
-        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         // Estraggo il parametro (gioco) dal bundle ed eventualmente lo visualizzo
         arguments?.let {
 
             gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
             gioco?.let {
                 val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
-                if (gioco?.id == id) {
-                    setHasOptionsMenu(true)
-                }
-
                 //devo leggerli dal database
                 val myRef = FirebaseDatabase.getInstance().getReference("Giochi").child(gioco?.console.toString())/*.child(gioco?.key.toString())*/
                 fun loadList(callback: (list: List<Gioco>) -> Unit) {
