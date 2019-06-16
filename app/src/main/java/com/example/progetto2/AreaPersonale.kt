@@ -84,6 +84,28 @@ class AreaPersonale : Fragment() {
         lista_mieigiochi.adapter = adapter
         var cont=0
 
+        val myRef = FirebaseDatabase.getInstance().getReference("users").child(user).child("Dati")
+        fun loadList(callback: (list: List<User>) -> Unit) {
+            myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(snapshotError: DatabaseError) {
+                    TODO("not implemented")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list : MutableList<User> = mutableListOf()
+                    val children = snapshot!!.children
+                    children.forEach {
+                        list.add(it.getValue(User::class.java)!!)
+                    }
+                    callback(list)
+                }
+            })
+        }
+        loadList {
+            email.setText(it.get(0).email)
+            cell.setText(it.get(0).cell)
+        }
+
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
@@ -94,12 +116,6 @@ class AreaPersonale : Fragment() {
                 adapter.notifyItemInserted(games.indexOf(g))
                 cont++
                 annunci.setText(cont.toString())
-
-                val usr = dataSnapshot.getValue(User::class.java)
-                email.setText(usr?.email)
-                cell.setText(usr?.cell)
-
-                // ...
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
@@ -107,8 +123,6 @@ class AreaPersonale : Fragment() {
                 val index = keys.indexOf(dataSnapshot.key.toString()) //ottengo l'indice del gioco aggiornato
                 games.set(index,g)
                 adapter.notifyDataSetChanged()
-
-                // ...
             }
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
@@ -116,7 +130,6 @@ class AreaPersonale : Fragment() {
                 val index = games.indexOf(g)
                 games.remove(g)
                 adapter.notifyItemRemoved(index)
-                // ...
             }
             override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
@@ -125,8 +138,6 @@ class AreaPersonale : Fragment() {
                 // displaying this comment and if so move it.
                 val movedComment = dataSnapshot.getValue(Gioco::class.java)
                 val commentKey = dataSnapshot.key
-
-                // ...
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException())
@@ -137,8 +148,6 @@ class AreaPersonale : Fragment() {
         try {
             database.child(user).child("mygames")
                 .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
-            database.child(user).child("Dati")
-                .addChildEventListener(childEventListener)
         }
         catch (e : Exception){
             Toast.makeText(activity,"Non sei loggato", Toast.LENGTH_SHORT).show()
@@ -148,18 +157,4 @@ class AreaPersonale : Fragment() {
         lista_mieigiochi.layoutManager = LinearLayoutManager(activity)
 
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-
-
 }
