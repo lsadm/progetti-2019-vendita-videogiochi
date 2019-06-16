@@ -173,9 +173,4 @@ class fragment_impostazioni : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
-    }
 }
