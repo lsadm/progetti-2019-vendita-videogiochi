@@ -1,33 +1,21 @@
 package com.example.progetto2
 
-import android.app.DownloadManager
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.MenuItemCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Checkable
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.navigation.NavHost
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.progetto2.datamodel.Loggato
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_fragment_login.*
-import android.support.v4.view.MenuItemCompat.setOnActionExpandListener
-import android.widget.ImageView
-import android.support.v4.view.MenuItemCompat.setOnActionExpandListener
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -74,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 // Do whatever you need
+                menu?.removeItem(R.id.button_logout)
+                menu?.removeItem(R.id.button_login)
                 return true // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
             }
 
@@ -81,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                 // Do whatever you need
                 val NavHost  = supportFragmentManager.fragments.get(0) as NavHostFragment
                 val fragment = NavHost.childFragmentManager.fragments.get(0) as ps4_list
+                invalidateOptionsMenu()
                 supportFragmentManager.beginTransaction().detach(fragment).attach(fragment).commit()
 
                 return true // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
@@ -97,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
         when (item?.itemId) {
-            R.id.fragment_login -> Navigation.findNavController(
+            R.id.button_login -> Navigation.findNavController(
                 this,
                 R.id.navHost
             ).navigate(R.id.action_home_to_fragment_impostazioni)
