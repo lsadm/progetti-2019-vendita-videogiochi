@@ -95,7 +95,7 @@ class AreaPersonale : Fragment() {
                 keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
                 adapter.notifyItemInserted(games.indexOf(g))
                 cont++
-                annunci.setText(cont.toString())
+                try { annunci.text=cont.toString() }catch(e:Exception) {}
             }
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
