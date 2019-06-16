@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/email"
             app:layout_constraintBottom_toBottomOf="@+id/textView6" app:layout_constraintStart_toEndOf="@+id/textView6"
-            android:layout_marginStart="115dp"/>
+            android:layout_marginStart="114dp"/>
     <TextView
             android:text="@string/defaults"
             android:layout_width="wrap_content"

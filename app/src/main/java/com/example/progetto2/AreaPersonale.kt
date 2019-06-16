@@ -86,6 +86,8 @@ class AreaPersonale : Fragment() {
         lista_mieigiochi.adapter = adapter
         var cont=0
 
+        annunci.text=cont.toString()
+
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)

@@ -2,11 +2,15 @@ package com.example.progetto2
 
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -28,6 +32,9 @@ import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.riga.*
+import android.view.LayoutInflater
+
+
 
 
 class dettaglio_gioco : Fragment() {
@@ -202,6 +209,29 @@ class dettaglio_gioco : Fragment() {
             val seller = cellulare_dettaglio.text.toString()
             callCell(seller)
         }
+
+        picture0.setOnClickListener {
+            zoomFoto(picture0)
+        }
+        picture1.setOnClickListener {
+            zoomFoto(picture1)
+        }
+        picture2.setOnClickListener {
+            zoomFoto(picture2)
+        }
+
+    }
+    //funzione per ingrandire le foto
+    private fun zoomFoto(img : ImageView) {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.foto, null)
+        dialogBuilder.setView(dialogView)
+        val imageview = dialogView.findViewById(R.id.imageView) as ImageView
+        val bitmap = (img.drawable as? BitmapDrawable)?.bitmap
+        imageview.setImageBitmap(bitmap)
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
     }
 
     //funzione per chiamare proprietario gioco
