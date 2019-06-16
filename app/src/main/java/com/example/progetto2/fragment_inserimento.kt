@@ -194,7 +194,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
             val mountainsRef = storageRef.child(console).child(key).child("picture" + i.toString())
             val bitmap = (foto.get(i).drawable as? BitmapDrawable)?.bitmap
             val baos = ByteArrayOutputStream()
-            bitmap?.compress(Bitmap.CompressFormat.JPEG,1000, baos)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG,100, baos)
             val data = baos.toByteArray()
             if(data.isNotEmpty()) {
                 //l'utente ha caricato delle foto, quindi bisogna caricarle
