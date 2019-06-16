@@ -224,13 +224,16 @@ class ps4_list : Fragment() {
             }
         }
         if (flag == 1) {
-            database_ps4.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener)   //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+            database_ps4.orderByChild("luogo").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener)
+            database_ps4.orderByChild("nome").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener)   //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
         if (flag == 2) {
-            database_xbox.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener) //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+            database_xbox.orderByChild("luogo").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener)
+            database_xbox.orderByChild("nome").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener) //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
         if (flag == 3) {
-            database_nintendo.orderByChild("nome").equalTo(query).addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+            database_nintendo.orderByChild("luogo").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener)
+            database_nintendo.orderByChild("nome").startAt(query).endAt(query+"\uf8ff").addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
         }
     }
 

@@ -127,13 +127,7 @@ class fragment_impostazioni : Fragment() {
     }
 
     private fun campivalidi() : Boolean{
-        if (email.text.toString().length > 0 && password.text.toString().length > 0){
-            return true
-        }
-        else{
-            return false
-        }
-
+       return (email.text.toString().isNotEmpty() && password.text.toString().isNotEmpty())
     }
 
     private fun salvaImpostazioni() {
