@@ -102,7 +102,7 @@ class dettaglio_gioco : Fragment() {
                 (activity as AppCompatActivity).supportActionBar?.setTitle("BuyGames")
                 val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
                 //li legge dal database utilizzando il gioco passato, così i dati saranno aggiornati anche dopo la modifica
-                val myRef = FirebaseDatabase.getInstance().getReference("Giochi").child(gioco?.console.toString())/*.child(gioco?.key.toString())*/
+                val myRef = FirebaseDatabase.getInstance().getReference("Giochi").child(gioco?.console.toString())
                 fun loadList(callback: (list: List<Gioco>) -> Unit) {
                     myRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onCancelled(snapshotError: DatabaseError) {

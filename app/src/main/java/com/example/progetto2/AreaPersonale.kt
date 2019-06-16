@@ -14,9 +14,11 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import com.example.progetto2.datamodel.Gioco
+import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_area_personale.*
+import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
 import kotlinx.android.synthetic.main.fragment_ps4_list.*
 import java.lang.Exception
 
@@ -40,7 +42,8 @@ class AreaPersonale : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var database : DatabaseReference
-    lateinit var auth : FirebaseAuth
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +51,8 @@ class AreaPersonale : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
         database = FirebaseDatabase.getInstance().getReference("users")
-        auth = FirebaseAuth.getInstance()
         setHasOptionsMenu(true)
     }
 
@@ -79,20 +82,25 @@ class AreaPersonale : Fragment() {
         val keys = ArrayList<String>()
         val adapter = Adapter(games,requireContext())
         lista_mieigiochi.adapter = adapter
+        var cont=0
 
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
-
                 // A new comment has been added, add it to the displayed list
                 val g = dataSnapshot.getValue(Gioco::class.java)
                 games.add(g)
                 keys.add(dataSnapshot.key.toString()) //aggiungo le varie key in un vettore
                 adapter.notifyItemInserted(games.indexOf(g))
+                cont++
+                annunci.setText(cont.toString())
+
+                val usr = dataSnapshot.getValue(User::class.java)
+                email.setText(usr?.email)
+                cell.setText(usr?.cell)
 
                 // ...
             }
-
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
                 val g = dataSnapshot.getValue(Gioco::class.java)
@@ -102,7 +110,6 @@ class AreaPersonale : Fragment() {
 
                 // ...
             }
-
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
                 val g = dataSnapshot.getValue(Gioco::class.java)
@@ -111,7 +118,6 @@ class AreaPersonale : Fragment() {
                 adapter.notifyItemRemoved(index)
                 // ...
             }
-
             override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
 
@@ -122,7 +128,6 @@ class AreaPersonale : Fragment() {
 
                 // ...
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException())
                 Toast.makeText(context, "Failed to load comments.",
@@ -130,13 +135,14 @@ class AreaPersonale : Fragment() {
             }
         }
         try {
-            database.child(auth.currentUser!!.uid).child("mygames")
+            database.child(user).child("mygames")
                 .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+            database.child(user).child("Dati")
+                .addChildEventListener(childEventListener)
         }
         catch (e : Exception){
             Toast.makeText(activity,"Non sei loggato", Toast.LENGTH_SHORT).show()
         }
-
 
         // Imposto il layout manager a lineare per avere scrolling in una direzione
         lista_mieigiochi.layoutManager = LinearLayoutManager(activity)

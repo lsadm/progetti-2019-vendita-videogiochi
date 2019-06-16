@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cell"
-            app:layout_constraintStart_toEndOf="@+id/textView4" android:layout_marginStart="28dp"
+            app:layout_constraintStart_toEndOf="@+id/textView4" android:layout_marginStart="27dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"/>
     <TextView
             android:text="@string/defaults"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/email"
             app:layout_constraintBottom_toBottomOf="@+id/textView6" app:layout_constraintStart_toEndOf="@+id/textView6"
-            android:layout_marginStart="116dp"/>
+            android:layout_marginStart="115dp"/>
     <TextView
             android:text="@string/defaults"
             android:layout_width="wrap_content"
