@@ -13,7 +13,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
+import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -43,7 +45,7 @@ class AreaPersonale : Fragment() {
     private var param2: String? = null
     lateinit var database : DatabaseReference
     val auth = FirebaseAuth.getInstance()
-    val user = auth.currentUser!!.uid
+    val user = auth.currentUser?.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,28 +86,6 @@ class AreaPersonale : Fragment() {
         lista_mieigiochi.adapter = adapter
         var cont=0
 
-        val myRef = FirebaseDatabase.getInstance().getReference("users").child(user).child("Dati")
-        fun loadList(callback: (list: List<User>) -> Unit) {
-            myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onCancelled(snapshotError: DatabaseError) {
-                    TODO("not implemented")
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val list : MutableList<User> = mutableListOf()
-                    val children = snapshot!!.children
-                    children.forEach {
-                        list.add(it.getValue(User::class.java)!!)
-                    }
-                    callback(list)
-                }
-            })
-        }
-        loadList {
-            email.setText(it.get(0).email)
-            cell.setText(it.get(0).cell)
-        }
-
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
@@ -145,13 +125,40 @@ class AreaPersonale : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-        try {
-            database.child(user).child("mygames")
-                .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
-        }
-        catch (e : Exception){
-            Toast.makeText(activity,"Non sei loggato", Toast.LENGTH_SHORT).show()
-        }
+            if(user!=null) {
+                val myRef = FirebaseDatabase.getInstance().getReference("users").child(user.toString()).child("Dati")
+                fun loadList(callback: (list: List<User>) -> Unit) {
+                    myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(snapshotError: DatabaseError) {
+                            TODO("not implemented")
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val list: MutableList<User> = mutableListOf()
+                            val children = snapshot!!.children
+                            children.forEach {
+                                list.add(it.getValue(User::class.java)!!)
+                            }
+                            callback(list)
+                        }
+                    })
+                }
+                loadList {
+                    try {
+                        email.text = it.get(0).email.toString()
+                        cell.text = it.get(0).cell.toString()
+                    }catch(e : Exception) {}
+                }
+
+                database.child(user.toString()).child("mygames")
+                    .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
+            }
+            else {
+                Navigation.findNavController(view!!).navigate(R.id.action_fragment_area_personale_to_ps4_list)
+                Navigation.findNavController(view!!).navigate(R.id.action_home_to_fragment_impostazioni)
+                Toast.makeText(activity,"Non sei loggato", Toast.LENGTH_SHORT).show()
+            }
+
 
         // Imposto il layout manager a lineare per avere scrolling in una direzione
         lista_mieigiochi.layoutManager = LinearLayoutManager(activity)

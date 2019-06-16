@@ -32,6 +32,7 @@
                 app:destination="@id/fragment_login"/>
         <action android:id="@+id/action_to_dettaglio_gioco"
                 app:destination="@id/dettaglio_gioco"/>
+        <action android:id="@+id/action_fragment_area_personale_to_ps4_list" app:destination="@id/ps4_list"/>
     </fragment>
     <fragment android:id="@+id/dettaglio_gioco" android:name="com.example.progetto2.dettaglio_gioco"
               android:label="fragment_dettaglio_gioco" tools:layout="@layout/fragment_dettaglio_gioco">
