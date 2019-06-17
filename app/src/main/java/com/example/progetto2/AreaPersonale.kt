@@ -1,10 +1,8 @@
 package com.example.progetto2
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -15,47 +13,26 @@ import android.view.*
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.progetto2.datamodel.Gioco
-import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_area_personale.*
-import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
-import kotlinx.android.synthetic.main.fragment_ps4_list.*
 import java.lang.Exception
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [AreaPersonale.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [AreaPersonale.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
 class AreaPersonale : Fragment() {
-    // TODO: Rename and change types of parameters
+    //attributi
     private var param1: String? = null
     private var param2: String? = null
     lateinit var database : DatabaseReference
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser?.uid
 
+    //metodi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
         database = FirebaseDatabase.getInstance().getReference("users")
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(true) //avvisa che deve essere invocata la funzione onCreateOptionsMenu
     }
 
     override fun onCreateView(
@@ -68,14 +45,16 @@ class AreaPersonale : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-            menu?.removeItem(R.id.app_bar_search)
+            menu?.removeItem(R.id.app_bar_search) //rimuove l'action bar dall'area personale
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //setto colore e titolo dell'action bar
         (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
         (activity as AppCompatActivity).supportActionBar?.setTitle("Area personale")
 
+        //divide le varie righe della recycleView
         lista_mieigiochi.addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL))
 
         val v: View? = activity?.findViewById(R.id.bottomNavigation)
@@ -84,11 +63,14 @@ class AreaPersonale : Fragment() {
         val keys = ArrayList<String>()
         val adapter = Adapter(games,requireContext())
         lista_mieigiochi.adapter = adapter
-        var cont=0
+        var cont=0 //contatore di righe inserite nella recycleView
 
+        //setta la textView annunci col valore di cont, inizialmente a 0
         annunci.text=cont.toString()
 
+        //Vari listener (di Firebase) per aggiornare dinamicamente la recycleView
         val childEventListener = object : ChildEventListener {
+            //inserimento elemento
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
                 // A new comment has been added, add it to the displayed list
@@ -99,6 +81,7 @@ class AreaPersonale : Fragment() {
                 cont++
                 try { annunci.text=cont.toString() }catch(e:Exception) {}
             }
+            //modifica elemento
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
                 val g = dataSnapshot.getValue(Gioco::class.java)
@@ -106,6 +89,7 @@ class AreaPersonale : Fragment() {
                 games.set(index,g)
                 adapter.notifyDataSetChanged()
             }
+            //rimozione elemento
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
                 val g = dataSnapshot.getValue(Gioco::class.java)
@@ -115,11 +99,6 @@ class AreaPersonale : Fragment() {
             }
             override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                val movedComment = dataSnapshot.getValue(Gioco::class.java)
-                val commentKey = dataSnapshot.key
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException())
@@ -127,43 +106,45 @@ class AreaPersonale : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-            if(user!=null) {
-                val myRef = FirebaseDatabase.getInstance().getReference("users").child(user.toString()).child("Dati")
-                fun loadList(callback: (list: List<User>) -> Unit) {
-                    myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onCancelled(snapshotError: DatabaseError) {
-                            TODO("not implemented")
-                        }
+        if(user!=null) {
+            //scarico dal database le informazioni del singolo utente e le aggiungo in una lista
+            dataUser()
+            //chiamata al listener per caricare e modificare la recycleView
+            database.child(user.toString()).child("mygames")
+                .addChildEventListener(childEventListener) //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
 
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val list: MutableList<User> = mutableListOf()
-                            val children = snapshot!!.children
-                            children.forEach {
-                                list.add(it.getValue(User::class.java)!!)
-                            }
-                            callback(list)
-                        }
-                    })
-                }
-                loadList {
-                    try {
-                        email.text = it.get(0).email.toString()
-                        cell.text = it.get(0).cell.toString()
-                    }catch(e : Exception) {}
-                }
-
-                database.child(user.toString()).child("mygames")
-                    .addChildEventListener(childEventListener)    //il database da cui chiamo il listener fa variare il sottonodo del database che vado a leggere
-            }
-            else {
-                Navigation.findNavController(view!!).navigate(R.id.action_fragment_area_personale_to_ps4_list)
-                Navigation.findNavController(view!!).navigate(R.id.action_home_to_fragment_impostazioni)
-                Toast.makeText(activity,"Non sei loggato", Toast.LENGTH_SHORT).show()
-            }
-
-
+        }
+        //l'utente non è loggato quindi viene reindirizzato al login
+        else {
+            Navigation.findNavController(view!!).navigate(R.id.action_fragment_area_personale_to_ps4_list)
+            Navigation.findNavController(view!!).navigate(R.id.action_home_to_fragment_impostazioni)
+            Toast.makeText(activity, "Non sei loggato", Toast.LENGTH_SHORT).show()
+        }
         // Imposto il layout manager a lineare per avere scrolling in una direzione
         lista_mieigiochi.layoutManager = LinearLayoutManager(activity)
+    }
 
+    private fun dataUser() {
+        val myRef = FirebaseDatabase.getInstance().getReference("users").child(user.toString()).child("Dati")
+        fun loadList(callback: (list: List<User>) -> Unit) {
+            myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(snapshotError: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list: MutableList<User> = mutableListOf()
+                    val children = snapshot!!.children
+                    children.forEach {
+                        list.add(it.getValue(User::class.java)!!)
+                    }
+                    callback(list)
+                }
+            })
+        }
+        //carico le textView usando gli elementi della lista
+        loadList {
+            try {
+                email.text = it.get(0).email.toString()
+                cell.text = it.get(0).cell.toString()
+            }catch (e: Exception) {}
+        }
     }
 }

@@ -77,10 +77,18 @@ class ps4_list : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //colora l'actionbar con lo stesso colore della piattaforma scelta
-        if(flag==1) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#004097")))
-        if(flag==2) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#107C10")))
-        if(flag==3) (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#DD0001")))
-        (activity as AppCompatActivity).supportActionBar?.setTitle("Games")
+        if(flag==1) {
+            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#004097")))
+            (activity as AppCompatActivity).supportActionBar?.setTitle("Playstation")
+        }
+        if(flag==2) {
+            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#107C10")))
+            (activity as AppCompatActivity).supportActionBar?.setTitle("Xbox")
+        }
+        if(flag==3) {
+            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#DD0001")))
+            (activity as AppCompatActivity).supportActionBar?.setTitle("Nintendo")
+        }
         //separatori tra righe
         lista_giochi.addItemDecoration(
             DividerItemDecoration(

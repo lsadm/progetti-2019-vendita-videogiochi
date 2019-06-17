@@ -138,9 +138,11 @@ class dettaglio_gioco : Fragment() {
                         Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
 
                         val usr = dataSnapshot.getValue(User::class.java)
-                        utente_dettaglio.text = usr?.email
-                        cellulare_dettaglio.text = usr?.cell
-                        // ...
+                        try {
+                            utente_dettaglio.text = usr?.email
+                            cellulare_dettaglio.text = usr?.cell
+                        }catch(e : Exception) {}
+
                     }
                     override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
                         Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")

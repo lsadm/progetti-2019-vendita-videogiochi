@@ -3,7 +3,6 @@ package com.example.progetto2
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -14,37 +13,33 @@ import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.*
 import androidx.navigation.Navigation
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.progetto2.datamodel.Gioco
-import com.example.progetto2.datamodel.flag
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_fragment_inserimento.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import java.io.ByteArrayOutputStream
-import java.lang.Thread.sleep
-import java.util.concurrent.Semaphore
-
 
 class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
-    var mod = 0
+    //attributi
+    var mod = 0 //indica se il gioco deve essere modificato
     val database = FirebaseDatabase.getInstance().reference
     val storageRef = FirebaseStorage.getInstance().getReference()
     val foto = ArrayList<ImageButton>() //array usato per inserire 3 foto
     var gioco : Gioco? =null
     var console_spinner : String? = null
-    var x = intArrayOf(0,0,0)
+    var x = intArrayOf(0,0,0) //usato per sapere quali imagebutton sono stati usati
     var foto_fatte : Int =0
     var foto_caricate : Int = 0
+    var REQUEST_IMAGE_CAPTURE = 1 // Costante utilizzata per distinguere l'origine della richiesta della fotocamera
+
+    //metodi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //aggiungo questa riga per aggiungere un riferimento al menu
         setHasOptionsMenu(true)
     }
-    // Costante utilizzata per distinguere l'origine della richiesta
-    var REQUEST_IMAGE_CAPTURE = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,45 +53,39 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?){
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
-        inflater?.inflate(R.menu.menu_inserimento, menu)
+        inflater?.inflate(R.menu.menu_inserimento, menu) //visualizzo solo la spunta per l'inserimento
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //carico l'arraylist con i nomi degli imagebutton
         foto.add(foto1)
         foto.add(foto2)
         foto.add(foto3)
-        val v: View? = activity?.findViewById(R.id.bottomNavigation)
-        v?.visibility=View.GONE
+
+        val v: View? = activity?.findViewById(R.id.bottomNavigation) //ottengo una reference al BottomNavigation
+        v?.visibility=View.GONE //e lo rendo invisibile
+        //in inserimento ci andare per inserire un gioco oppure per modificarlo, se devo modificarlo allora verrà passato un bundle
+        //contenente il gioco da modificare
         arguments?.let{
             //modifico il gioco
             mod = 1
-
-            gioco = it.getParcelable("gioco")   //TODO: Il nome dovrebbe essere in un unico punto!!
+            //estraggo il gioco dal bundle
+            gioco = it.getParcelable("gioco")
             gioco?.let {
+                //e mostro nel dettaglio i suoi attributi
                 nome_gioco.setText(gioco?.nome)
                 prezzo_gioco.setText(gioco?.prezzo.toString())
                 luogo_gioco.setText(gioco?.luogo)
                 spinner.visibility = View.GONE  //nascondo spinner nella modifica
-                for(i in 0..2) {
-                    val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
-                    imagRef.child("picture"+i.toString()).downloadUrl.addOnSuccessListener {
-                        x[i]=1
-                        GlideApp.with(this).load(it).into(foto.get(i))
-                    }.addOnFailureListener {
-                        // Handle any errors
-                    }
-                }
-                foto_fatte=x[0]+x[1]+x[2]
-                }
+                download_foto() //scarico le foto e le inserisco negli imageButton
+                (activity as AppCompatActivity).supportActionBar?.setTitle("Modifica gioco") //lascio il colore della console e setto come titolo modifica
+            }
         }
         //se non devo modificare il gioco mostro il colore di default e la scritta inserimento
         if(mod!=1) {
             (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
             (activity as AppCompatActivity).supportActionBar?.setTitle("Inserimento gioco")
         }
-        else (activity as AppCompatActivity).supportActionBar?.setTitle("Modifica gioco")
-        //altrimenti lascio il colore della console e il titolo modifica
-
         // Imposta il funzionamento del pulsante per l'acqisizione dell'immagine
         val takePhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         foto1.setOnClickListener {
@@ -120,23 +109,10 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                 startActivityForResult(takePhoto, REQUEST_IMAGE_CAPTURE)
             }
         }
-        //spinner
-        val spinner: Spinner = activity!!.findViewById(R.id.spinner)
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-            context,
-            R.array.console_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner.adapter = adapter
-            spinner.onItemSelectedListener = this
-        }
-
+        //settaggio spinner
+        set_spinner()
     }
-    //inserimento annuncio, con tasto in alto a destra
+    //quando si clicca il pulsante inserimento in alto a destra vengono
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
                 val nome = nome_gioco.text.toString()
                 val luogo = luogo_gioco.text.toString()
@@ -186,6 +162,37 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
 
 
         return super.onOptionsItemSelected(item)
+    }
+
+    //setta lo spinner usato per scegliere la piattaforma del gioco
+    private fun set_spinner() {
+        val spinner: Spinner = activity!!.findViewById(R.id.spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            context,
+            R.array.console_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            spinner.onItemSelectedListener = this
+        }
+    }
+
+    //scarica foto dal database e le inserisce degli ImageButton
+    private fun download_foto() {
+        for (i in 0..2) {
+            val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/")
+            imagRef.child("picture" + i.toString()).downloadUrl.addOnSuccessListener {
+                x[i] = 1 //flag che indica l'utilizzo dell'i-esimo imageButton
+                GlideApp.with(this).load(it).into(foto.get(i))
+            }.addOnFailureListener {
+                // Handle any errors
+            }
+        }
+        foto_fatte = x[0] + x[1] + x[2] //tiene conto degli imageButton usati
     }
 
     fun caricaFoto(key : String, console : String){

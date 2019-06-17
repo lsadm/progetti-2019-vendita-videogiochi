@@ -11,8 +11,10 @@ import com.example.progetto2.datamodel.Gioco
 import com.google.firebase.storage.FirebaseStorage
 
 class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerView.Adapter<RigaGiocoViewHolder>() {
+    //attributi
     val storageRef = FirebaseStorage.getInstance().getReference()
 
+    //metodi
 
     // Invocata per creare un ViewHolder
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RigaGiocoViewHolder {
@@ -30,21 +32,19 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
         val gioco = dataset.get(position)
         val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/").child("picture0")
 
+        //carica gli elementi del viewholder con i dati del gioco
         viewHolder.Nome.text = gioco?.nome
         viewHolder.Prezzo.text= gioco?.prezzo.toString()+"€"
         viewHolder.Luogo.text= gioco?.luogo
-
-            imagRef.downloadUrl.addOnSuccessListener {
-                GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
-            }
-
-        // Imposto il listner per passare a visualizzare il dettaglio
+        //scarica la foto dal database e la setta nella riga
+        imagRef.downloadUrl.addOnSuccessListener {
+            GlideApp.with(context).load(it).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(viewHolder.Immagine)
+        }
+        // Imposto il listner per passare a visualizzare il dettaglio (permette di passare al fragment dettaglio gioco)
         viewHolder.itemView.setOnClickListener {
             // Creo un bundle e vi inserisco il gioco da visualizzare
             val b = Bundle()
             b.putParcelable("gioco",gioco)     //TODO: Il nome dell'ogggetto andrebbe inserito in un solo punto!!
-            //ho due recycle view quindi per distinguerle uso questo parametro "chiamante"
-            //se è 0 allora sto nella ps4_list, altrimenti nell'area personale
             Navigation.findNavController(it).navigate(R.id.action_to_dettaglio_gioco, b)
         }
     }
