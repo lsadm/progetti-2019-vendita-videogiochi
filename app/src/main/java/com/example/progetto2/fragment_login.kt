@@ -127,13 +127,7 @@ class fragment_impostazioni : Fragment() {
     }
 
     private fun campivalidi() : Boolean{
-        if (email.text.toString().length > 0 && password.text.toString().length > 0){
-            return true
-        }
-        else{
-            return false
-        }
-
+       return (email.text.toString().isNotEmpty() && password.text.toString().isNotEmpty())
     }
 
     private fun salvaImpostazioni() {
@@ -172,10 +166,5 @@ class fragment_impostazioni : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
     }
 }

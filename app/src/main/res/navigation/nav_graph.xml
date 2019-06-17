@@ -6,17 +6,17 @@
     <fragment android:id="@+id/home" android:name="com.example.progetto2.Home" android:label="fragment_home"
               tools:layout="@layout/fragment_home">
         <action android:id="@+id/action_home_to_ps4_list" app:destination="@id/ps4_list"/>
-        <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"
+        <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/button_login"
         />
         <action android:id="@+id/action_home_to_areaPersonale" app:destination="@id/fragment_area_personale"/>
     </fragment>
     <fragment android:id="@+id/ps4_list" android:name="com.example.progetto2.ps4_list"
               android:label="fragment_ps4_list" tools:layout="@layout/fragment_ps4_list">
-        <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/fragment_login"/>
+        <action android:id="@+id/action_home_to_fragment_impostazioni" app:destination="@id/button_login"/>
         <action android:id="@+id/action_ps4_list_to_fragment_inserimento" app:destination="@id/fragment_inserimento"/>
         <action android:id="@+id/action_to_dettaglio_gioco" app:destination="@id/dettaglio_gioco"/>
     </fragment>
-    <fragment android:id="@+id/fragment_login" android:name="com.example.progetto2.fragment_impostazioni"
+    <fragment android:id="@+id/button_login" android:name="com.example.progetto2.fragment_impostazioni"
               android:label="fragment_fragment_impostazioni" tools:layout="@layout/fragment_fragment_login">
         <action android:id="@+id/action_fragment_login_to_newaccount" app:destination="@id/newaccount"/>
     </fragment>
@@ -29,7 +29,7 @@
     <fragment android:id="@+id/fragment_area_personale" android:name="com.example.progetto2.AreaPersonale"
               android:label="fragment_area_personale" tools:layout="@layout/fragment_area_personale">
         <action android:id="@+id/action_home_to_fragment_impostazioni"
-                app:destination="@id/fragment_login"/>
+                app:destination="@id/button_login"/>
         <action android:id="@+id/action_to_dettaglio_gioco"
                 app:destination="@id/dettaglio_gioco"/>
         <action android:id="@+id/action_fragment_area_personale_to_ps4_list" app:destination="@id/ps4_list"/>
