@@ -26,6 +26,10 @@ import kotlinx.android.synthetic.main.fragment_dettaglio_gioco.*
 import com.google.firebase.database.FirebaseDatabase
 import android.view.LayoutInflater
 import com.google.firebase.storage.StorageReference
+import android.content.pm.ActivityInfo
+import android.app.Activity
+
+
 
 class dettaglio_gioco : Fragment() {
     //attributi
@@ -81,6 +85,7 @@ class dettaglio_gioco : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR) //impedisce la rotazione dello schermo
         // Estraggo il parametro (gioco) dal bundle ed eventualmente lo visualizzo
         arguments?.let {
             gioco = it.getParcelable("gioco")
@@ -171,6 +176,11 @@ class dettaglio_gioco : Fragment() {
         picture2.setOnClickListener {
             zoomFoto(picture2)
         }
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
     }
 
     //scarica le foto dal database

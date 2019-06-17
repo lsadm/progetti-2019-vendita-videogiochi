@@ -36,5 +36,9 @@
     <string name="accedi">accedi</string>
     <string name="Search">Cosa stai cercando ?</string>
     <string name="crea">Crea</string>
+    <string name="imgb">imgb</string>
+    <string name="Inserisci">Inserisci foto: (max3)</string>
+    <string name="prezzo">Prezzo</string>
+    <string name="luogo">Luogo</string>
 
 </resources>

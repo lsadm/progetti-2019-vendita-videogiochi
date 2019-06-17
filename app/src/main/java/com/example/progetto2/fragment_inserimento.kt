@@ -2,6 +2,7 @@ package com.example.progetto2
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -57,6 +58,8 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR) //impedisce la rotazione dello schermo
+
         //carico l'arraylist con i nomi degli imagebutton
         foto.add(foto1)
         foto.add(foto2)
@@ -235,6 +238,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
+        if(mod==0) activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
     }
 
     //funzione usata per distinguere i due casi: creazione e modifica

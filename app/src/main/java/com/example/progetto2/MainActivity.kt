@@ -13,8 +13,8 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.progetto2.datamodel.Loggato
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val PREF_PASSWORD = "Password"
     private val PREF_AUTOLOGIN = "AutoLogin"
     private val auth = FirebaseAuth.getInstance()
+    private var usr : FirebaseUser? = null
 
     //metodi
 
@@ -36,12 +37,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (Loggato().usr == null) { //se non è loggato compare login
+        if (usr == null) { //se non è loggato compare login
             menuInflater.inflate(R.menu.button_login, menu)
-            //menuInflater.inflate(R.menu.search, menu)
         } else { //altrimenti logout
             menuInflater.inflate(R.menu.button_logout, menu)
-            // menuInflater.inflate(R.menu.search, menu)
         }
         // Inflate the options menu from XML
         val inflater = menuInflater
@@ -81,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 .navigate(R.id.action_home_to_fragment_impostazioni) //vado nel fragment login
             R.id.button_logout -> {
                 auth.signOut() //effettua il logout
+                usr = FirebaseAuth.getInstance().currentUser
                 invalidateOptionsMenu() //dopo il logout invalido il menu, così viene richiamato onCreateOptionsMenu (per far comparire login)
                 Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show()
             }
@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d("MainActivity", "signInWithEmail:success")
                 Toast.makeText(baseContext, "Utente loggato", Toast.LENGTH_SHORT).show()
+                usr = FirebaseAuth.getInstance().currentUser
                 invalidateOptionsMenu() //dopo il logout invalido il menu, così viene richiamato onCreateOptionsMenu (per visualizzare logout)
             } else {
                 // If sign in fails, display a message to the user.

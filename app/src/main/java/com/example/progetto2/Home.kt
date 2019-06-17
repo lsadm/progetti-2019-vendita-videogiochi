@@ -8,11 +8,10 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.support.v7.app.AppCompatActivity
 import android.view.*
-import com.example.progetto2.datamodel.Loggato
 import com.example.progetto2.datamodel.flag
+import com.google.firebase.auth.FirebaseAuth
 
 class Home : Fragment() {
-
     //metodi
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +54,8 @@ class Home : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         menu?.clear()
-        if(Loggato().usr==null) { //se non è loggato esce login
+        val usr = FirebaseAuth.getInstance().currentUser
+        if(usr==null) { //se non è loggato esce login
             inflater?.inflate(R.menu.button_login, menu)
         }
         else { //altrimenti logout

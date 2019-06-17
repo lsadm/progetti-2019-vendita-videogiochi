@@ -1,6 +1,7 @@
 package com.example.progetto2
 
 import android.content.ContentValues.TAG
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -45,6 +46,7 @@ class AreaPersonale : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR) //impedisce la rotazione dello schermo
         super.onViewCreated(view, savedInstanceState)
         //setto colore e titolo dell'action bar
         (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
@@ -120,6 +122,13 @@ class AreaPersonale : Fragment() {
         lista_mieigiochi.layoutManager = LinearLayoutManager(activity)
     }
 
+    //quando lascio il fragment abilito la rotazione
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.requestedOrientation=(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+    }
+
+    //scarica i dati dell'utente dal database
     private fun dataUser() {
         val myRef = FirebaseDatabase.getInstance().getReference("users").child(user.toString()).child("Dati")
         fun loadList(callback: (list: List<User>) -> Unit) {
