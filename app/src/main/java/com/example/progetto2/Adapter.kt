@@ -31,10 +31,11 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
     override fun onBindViewHolder(viewHolder: RigaGiocoViewHolder, position: Int) {
         val gioco = dataset.get(position)
         val imagRef = storageRef.child(gioco?.console.toString() + "/").child(gioco?.key.toString() + "/").child("picture0")
+        val prezzo_euro=gioco?.prezzo.toString()+"€"
 
         //carica gli elementi del viewholder con i dati del gioco
         viewHolder.Nome.text = gioco?.nome
-        viewHolder.Prezzo.text= gioco?.prezzo.toString()+"€"
+        viewHolder.Prezzo.text= prezzo_euro
         viewHolder.Luogo.text= gioco?.luogo
         //scarica la foto dal database e la setta nella riga
         imagRef.downloadUrl.addOnSuccessListener {

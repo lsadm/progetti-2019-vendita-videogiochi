@@ -112,54 +112,52 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         //settaggio spinner
         set_spinner()
     }
-    //quando si clicca il pulsante inserimento in alto a destra vengono
+
+    //quando si clicca il pulsante inserimento in alto a destra vengono salvati tutti i dati del gioco inseriti
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-                val nome = nome_gioco.text.toString()
-                val luogo = luogo_gioco.text.toString()
-                val prezzo = prezzo_gioco.text.toString()
-                val auth = FirebaseAuth.getInstance()
-                val id = auth.currentUser?.uid
-                var key : String?
-                var console : String? = null
-                gioco?.nome=nome
-                gioco?.luogo = luogo
-                gioco?.prezzo=prezzo.toInt()
+        val nome = nome_gioco.text.toString()
+        val luogo = luogo_gioco.text.toString()
+        val prezzo = prezzo_gioco.text.toString()
+        val auth = FirebaseAuth.getInstance()
+        val id = auth.currentUser?.uid
+        var key: String?
+        var console: String? = null
+        gioco?.nome = nome
+        gioco?.luogo = luogo
+        gioco?.prezzo = prezzo.toInt()
 
-
-                if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null ) {
-                        key = get_key(console.toString())
-                        console = get_console()
-                        database.child("Giochi").child(console.toString()).child(key.toString()).setValue(
-                            Gioco(
-                                nome,
-                                prezzo.toInt(),
-                                luogo,
-                                key,
-                                id,
-                                console
-                            )
-                        )    //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista giochi visibile a tutti
-                       database.child("users").child(id).child("mygames").child(key.toString()).setValue(
-                           Gioco(
-                               nome,
-                               prezzo.toInt(),
-                               luogo,
-                               key,
-                               id,
-                               console
-                           ))  //carico nel database nell'area riservata
-
-                    Toast.makeText(activity,"Caricamento in corso", Toast.LENGTH_SHORT).show()
-                    if(foto_fatte!=0) { //se ci sono foto da caricare
-                            caricaFoto(key.toString(),console.toString())
-                        }
-                    else Navigation.findNavController(view!!).navigateUp()
-                    //Toast.makeText(activity,"Gioco inserito correttamente",Toast.LENGTH_SHORT).show()
-                }
-                else { //se alcuni campi sono vuoti non posso caricare il gioco
-                        Toast.makeText(activity,"Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
-                     }
-
+        //carico il gioco nella lista di tutti i giochi di una piattaforma
+        if (nome.length > 0 && luogo.length > 0 && prezzo.toInt() > 0 && id != null) {
+            key = get_key(console.toString())
+            console = get_console()
+            database.child("Giochi").child(console.toString()).child(key.toString()).setValue(
+                Gioco(
+                    nome,
+                    prezzo.toInt(),
+                    luogo,
+                    key,
+                    id,
+                    console
+                )
+            ) //e nell'area personale dell'utente
+            //in quel percorso con identificativo unico inserisco il gioco , rappresenta la lista di giochi visibile a tutti
+            database.child("users").child(id).child("mygames").child(key.toString()).setValue(
+                Gioco(
+                    nome,
+                    prezzo.toInt(),
+                    luogo,
+                    key,
+                    id,
+                    console
+                )
+            )
+            Toast.makeText(activity, "Caricamento in corso", Toast.LENGTH_SHORT).show()
+            //se ci sono foto da caricare
+            if (foto_fatte != 0) caricaFoto(key.toString(), console.toString()) //le carico
+            else Navigation.findNavController(view!!).navigateUp() //altrimenti torno semplicemente indietro
+        }
+        //se alcuni campi sono vuoti non posso caricare il gioco
+        else Toast.makeText(activity, "Hai mancato qualche campo", Toast.LENGTH_SHORT).show()
 
         return super.onOptionsItemSelected(item)
     }
@@ -195,8 +193,8 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         foto_fatte = x[0] + x[1] + x[2] //tiene conto degli imageButton usati
     }
 
-    fun caricaFoto(key : String, console : String){
-        // Create a reference to "mountains.jpg",è il nome del file che stiamo caricando
+    //carica le foto sul database
+    private fun caricaFoto(key : String, console : String){
         for (i in 0 .. 2) {
             val mountainsRef = storageRef.child(console).child(key).child("picture" + i.toString())
             val bitmap = (foto.get(i).drawable as? BitmapDrawable)?.bitmap
@@ -212,15 +210,12 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
                     if(it.isSuccessful && foto_caricate==foto_fatte) Navigation.findNavController(view!!).navigateUp()
                 }.addOnFailureListener {
                     Toast.makeText(activity, "Foto non inserita correttamente", Toast.LENGTH_SHORT).show()
-                }.addOnSuccessListener {
-                }
+                }.addOnSuccessListener {}
             }
         }
     }
-    /**
-     * Questo metodo viene invocato per gestire il risultato al ritorno da una activity
-     * occorre determinare chi aveva generato la richiesta
-     */
+
+    //Questo metodo viene invocato per gestire il risultato al ritorno da una activity, occorre determinare chi aveva generato la richiesta
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {     // Acquisizione immagine
             val immagineCatturata = data?.extras?.get("data") as Bitmap
@@ -236,6 +231,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    //quando esco dall'inserimento risetto il titolo BuyGames
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as AppCompatActivity).supportActionBar?.setTitle("Buy Games")
@@ -252,8 +248,7 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-
-    //funzione usata per distinguere i due casi: creazione e modifica
+    //funzione usata per ottenere console dallo spinner se il gioco non è stato modificato ma è stato appena inserito
     private fun get_console() : String? {
         if(mod==0) {
             return console_spinner
@@ -263,11 +258,10 @@ class fragment_inserimento : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-
+    //funzioni usate per gestire lo spinner
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         console_spinner = parent?.getItemAtPosition(position).toString()
     }
-
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 }
