@@ -45,7 +45,7 @@ class Adapter(val dataset: ArrayList<Gioco?>, val context: Context) : RecyclerVi
         viewHolder.itemView.setOnClickListener {
             // Creo un bundle e vi inserisco il gioco da visualizzare
             val b = Bundle()
-            b.putParcelable("gioco",gioco)     //TODO: Il nome dell'ogggetto andrebbe inserito in un solo punto!!
+            b.putParcelable("gioco",gioco)
             Navigation.findNavController(it).navigate(R.id.action_to_dettaglio_gioco, b)
         }
     }

@@ -21,17 +21,13 @@ import java.lang.Exception
 
 class AreaPersonale : Fragment() {
     //attributi
-    private var param1: String? = null
-    private var param2: String? = null
-    lateinit var database : DatabaseReference
-    val auth = FirebaseAuth.getInstance()
-    val user = auth.currentUser?.uid
+    private val database = FirebaseDatabase.getInstance().getReference("users")
+    private val user = FirebaseAuth.getInstance().currentUser?.uid
 
     //metodi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        database = FirebaseDatabase.getInstance().getReference("users")
         setHasOptionsMenu(true) //avvisa che deve essere invocata la funzione onCreateOptionsMenu
     }
 
@@ -52,7 +48,7 @@ class AreaPersonale : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //setto colore e titolo dell'action bar
         (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#212121")))
-        (activity as AppCompatActivity).supportActionBar?.setTitle("Area personale")
+        (activity as AppCompatActivity).supportActionBar?.title="Area personale"
 
         //divide le varie righe della recycleView
         lista_mieigiochi.addItemDecoration(DividerItemDecoration(context,LinearLayoutManager.VERTICAL))
@@ -116,8 +112,8 @@ class AreaPersonale : Fragment() {
         }
         //l'utente non è loggato quindi viene reindirizzato al login
         else {
-            Navigation.findNavController(view!!).navigate(R.id.action_fragment_area_personale_to_ps4_list)
-            Navigation.findNavController(view!!).navigate(R.id.action_home_to_fragment_impostazioni)
+            Navigation.findNavController(view).navigate(R.id.action_fragment_area_personale_to_ps4_list)
+            Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_impostazioni)
             Toast.makeText(activity, "Non sei loggato", Toast.LENGTH_SHORT).show()
         }
         // Imposto il layout manager a lineare per avere scrolling in una direzione
@@ -142,8 +138,8 @@ class AreaPersonale : Fragment() {
         //carico le textView usando gli elementi della lista
         loadList {
             try {
-                email.text = it.get(0).email.toString()
-                cell.text = it.get(0).cell.toString()
+                email.text = it[0].email.toString()
+                cell.text = it[0].cell.toString()
             }catch (e: Exception) {}
         }
     }
