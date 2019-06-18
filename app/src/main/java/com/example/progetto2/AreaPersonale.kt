@@ -104,6 +104,10 @@ class AreaPersonale : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Imposto il layout manager a lineare per avere scrolling in una direzione
+        lista_mieigiochi.layoutManager = LinearLayoutManager(activity)
+
         if(user!=null) {
             //scarico dal database le informazioni del singolo utente e le aggiungo in una lista
             dataUser()
@@ -114,12 +118,10 @@ class AreaPersonale : Fragment() {
         }
         //l'utente non è loggato quindi viene reindirizzato al login
         else {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_area_personale_to_ps4_list)
-            Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_impostazioni)
             Toast.makeText(activity, "Non sei loggato", Toast.LENGTH_SHORT).show()
+            Navigation.findNavController(view).navigateUp()
+            Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_impostazioni)
         }
-        // Imposto il layout manager a lineare per avere scrolling in una direzione
-        lista_mieigiochi.layoutManager = LinearLayoutManager(activity)
     }
 
     //quando lascio il fragment abilito la rotazione
