@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        usr = FirebaseAuth.getInstance().currentUser
         if (usr == null) { //se non è loggato compare login
             menuInflater.inflate(R.menu.button_login, menu)
         } else { //altrimenti logout
@@ -80,7 +81,6 @@ class MainActivity : AppCompatActivity() {
                 .navigate(R.id.action_home_to_fragment_impostazioni) //vado nel fragment login
             R.id.button_logout -> {
                 auth.signOut() //effettua il logout
-                usr = FirebaseAuth.getInstance().currentUser
                 invalidateOptionsMenu() //dopo il logout invalido il menu, così viene richiamato onCreateOptionsMenu (per far comparire login)
                 Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show()
             }
@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity() {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d("MainActivity", "signInWithEmail:success")
                 Toast.makeText(baseContext, "Utente loggato", Toast.LENGTH_SHORT).show()
-                usr = FirebaseAuth.getInstance().currentUser
                 invalidateOptionsMenu() //dopo il logout invalido il menu, così viene richiamato onCreateOptionsMenu (per visualizzare logout)
             } else {
                 // If sign in fails, display a message to the user.
